@@ -7,12 +7,10 @@ class Sprite;
 struct frame
 {
 	int frameNumber;
-	glm::vec2 v_1UV;
-	glm::vec2 v_2UV;
-	glm::vec2 v_3UV;
-	glm::vec2 v_4UV;
-
-
+	glm::vec2 vone_UV;
+	glm::vec2 vtwo_UV;
+	glm::vec2 vthree_UV;
+	glm::vec2 vfour_UV;
 };
 
 class animate
@@ -21,7 +19,7 @@ public:
 	Sprite mSprite;
 	std::map<int, frame>FrameData;
 
-	void LoadFrameMap(const char * a_fileName);
+	void LoadAnimation(const char *);
 };
 
 #endif
