@@ -9,8 +9,9 @@
 class GLF
 {
 public:
-	InputHandler command;
-
+	Command command;
+	int hDirection, vDirection;
+	double currentFrame, deltaTime, lastFrame = 0;
 	std::vector<Sprite> mSpriteList;
 	const float* ortho;
 	GLFWwindow* window;

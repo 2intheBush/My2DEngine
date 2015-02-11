@@ -1,21 +1,11 @@
 #include "command.h"
 
-void MoveUpCommand::MoveUp()
+void Command::HandleInput(GLFWwindow* a_window)
 {
-	InputHandler::vertMovement = 1.f;
-}
-
-void MoveDownCommand::MoveDown()
-{
-	InputHandler::vertMovement = -1.f;
-}
-
-void MoveLeftCommand::MoveLeft()
-{
-	InputHandler::horzMovement = -1.f;
-}
-
-void MoveRightCommand::MoveRight()
-{
-	InputHandler::horzMovement = 1.f;
+	window = a_window;
+	horzAxis = vertAxis = 0;
+	if (IsKeyPressed(w)){ vertAxis += 1.f; };
+	if (IsKeyPressed(s)){ vertAxis += -1.f; };
+	if (IsKeyPressed(d)){ horzAxis += 1.f; };
+	if (IsKeyPressed(a)){ horzAxis += -1.f; };
 }

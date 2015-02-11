@@ -21,65 +21,69 @@ class Command
 {
 public:
 	~Command(){};
-	virtual void excecute() = 0;
-};
-
-
-class MoveUpCommand : public Command
-{
-public:
-	virtual void excecute(){ MoveUp(); };
-private:
-	void MoveUp();
-};
-
-class MoveDownCommand : public Command
-{
-public:
-	virtual void excecute(){ MoveDown(); };
-private:
-	void MoveDown();
-};
-
-class MoveLeftCommand : public Command
-{
-public:
-	virtual void excecute(){ MoveLeft(); };
-private:
-	void MoveLeft();
-};
-
-class MoveRightCommand : public Command
-{
-public:
-	virtual void excecute(){ MoveRight(); };
-private:
-	void MoveRight();
-};
-
-static class InputHandler
-{
-public:
-	void HandleInput(GLFWwindow* a_window)
-	{
-		window = a_window;
-		vertMovement = horzMovement = 0;
-		if (IsKeyPressed(w)) ButtonW_->excecute();
-		if (IsKeyPressed(a)) ButtonA_->excecute();
-		if (IsKeyPressed(s)) ButtonS_->excecute();
-		if (IsKeyPressed(d)) ButtonD_->excecute();
-	}
-
-	Command* ButtonW_;
-	Command* ButtonA_;
-	Command* ButtonS_;
-	Command* ButtonD_;
-
-	static float vertMovement;
-	static float horzMovement;
+	//virtual int excecute() = 0;
+	void HandleInput(GLFWwindow* a_window);
+	int horzAxis, vertAxis;
 private:
 	GLFWwindow* window;
 
 	bool IsKeyPressed(KeyPressed key){ return glfwGetKey(window, key); };
+
 };
+
+
+//class MoveUpCommand : public Command
+//{
+//public:
+//	virtual int excecute(){ return MoveUp(); };
+//private:
+//	int MoveUp();
+//};
+//
+//class MoveDownCommand : public Command
+//{
+//public:
+//	virtual int excecute(){ return MoveDown(); };
+//private:
+//	int MoveDown();
+//};
+//
+//class MoveLeftCommand : public Command
+//{
+//public:
+//	virtual int excecute(){return MoveLeft(); };
+//private:
+//	int MoveLeft();
+//};
+//
+//class MoveRightCommand : public Command
+//{
+//public:
+//	virtual int excecute(){return  MoveRight(); };
+//private:
+//	int MoveRight();
+//};
+//
+//static class InputHandler
+//{
+//public:
+//	void HandleInput(GLFWwindow* a_window)
+//	{
+//		window = a_window;
+//		if (IsKeyPressed(w)) ButtonW_->excecute();
+//		if (IsKeyPressed(a)) ButtonA_->excecute();
+//		if (IsKeyPressed(s)) ButtonS_->excecute();
+//		if (IsKeyPressed(d)) ButtonD_->excecute();
+//	}
+//
+//	Command* ButtonW_;
+//	Command* ButtonA_;
+//	Command* ButtonS_;
+//	Command* ButtonD_;
+//
+//private:
+//	GLFWwindow* window;
+//
+//	bool IsKeyPressed(KeyPressed key){ return glfwGetKey(window, key); };
+//};
 #endif

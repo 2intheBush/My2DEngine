@@ -39,7 +39,6 @@ int GLF::InitWindow(int screenWidth, int screenHeight, const char* title)
 	glAlphaFunc(GL_GREATER, 0);
 	return 0;
 }
-
 const float* GLF::getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar)
 {
 	//to correspond with mat4 in the shader
@@ -148,25 +147,26 @@ GLuint GLF::CreateProgram(const char *a_vertex, const char *a_frag)
 }
 void GLF::Shutdown()
 {
-	delete command.ButtonW_;
-	delete command.ButtonA_;
-	delete command.ButtonS_;
-	delete command.ButtonD_;
 	glfwTerminate();
 }
 bool GLF::UpdateFramework()
 {
+	currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
 	return !(glfwWindowShouldClose(window));
 }
 void GLF::SetScreenColor(float a_red, float a_green, float a_blue, float a_alpha)
 {
 	glClearColor(a_red, a_green, a_blue, a_alpha);
 	glClear(GL_COLOR_BUFFER_BIT);
+	command.HandleInput(window);
+	hDirection = command.horzAxis;
+	vDirection = command.vertAxis;
 }
 void GLF::SwapBuffers()
 {
 	glfwSwapBuffers(window);
-
+	lastFrame = currentFrame;
 	//poll for and process events
 	glfwPollEvents();
 }
