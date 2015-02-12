@@ -2,7 +2,6 @@
 #define _FRAMEWORK_H_
 
 #include <string>
-#include "sprite.h"
 #include "animation.h"
 #include "command.h"
 
@@ -13,6 +12,7 @@ public:
 	int hDirection, vDirection;
 	double currentFrame, deltaTime, lastFrame = 0;
 	std::vector<Sprite> mSpriteList;
+	animate Animation;
 	const float* ortho;
 	GLFWwindow* window;
 	int InitWindow(int screenWidth, int screenHeight, const char* title);
@@ -26,6 +26,11 @@ public:
 	bool UpdateFramework();
 	void SwapBuffers();
 	
+	void CreateAnimation(const char * a_fileName, AnimationType currentState, float width, float height);
+	void LoadAnimationSprite(const char * a_fileName, AnimationType currentState);
+	void DrawAnimatedSprite(AnimationType currentState);
+
+
 	unsigned int CreateSprite(const char* a_fileName, int width, int height);
 	void DrawSprite(unsigned int s);
 	void MoveSprite(unsigned int s, float x, float y);

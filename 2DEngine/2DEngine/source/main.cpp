@@ -11,6 +11,10 @@ int main()
 	float speed = 250.f;
 
 	unsigned int s = TwoDEngine.CreateSprite("resources\\images\\Astroid.png", 32, 32);
+	TwoDEngine.CreateAnimation("resources\\images\\vegeta_walking\\VegetaSprites.xml", walking, 16, 32);
+
+	animate boku;
+	animate begeta;
 
 	while (TwoDEngine.UpdateFramework())
 	{
@@ -22,7 +26,13 @@ int main()
 		TwoDEngine.MoveSprite(s, x, y);
 		TwoDEngine.DrawSprite(s);
 
+		TwoDEngine.DrawAnimatedSprite(walking);
 		TwoDEngine.SwapBuffers();
+
+		if (glfwGetKey(TwoDEngine.window, GLFW_KEY_W))
+		{
+			boku.PlayAnimation(walking);
+		}
 	}
 
 	TwoDEngine.Shutdown();

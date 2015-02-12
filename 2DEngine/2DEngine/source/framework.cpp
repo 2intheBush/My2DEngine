@@ -197,3 +197,22 @@ void GLF::UpdateVertex(unsigned int s)
 	mSpriteList[s].vertex[2].position = glm::vec4(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y + mSpriteList[s].sHeight, 0, 1);
 	mSpriteList[s].vertex[3].position = glm::vec4(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y - mSpriteList[s].sHeight, 0, 1);
 }
+
+void GLF::CreateAnimation(const char * a_fileName, AnimationType currentState, float width, float height)
+{
+
+	Animation.LoadAnimationUV(a_fileName, currentState);
+	Sprite s(a_fileName, width, height);
+	Animation.AnimatedSpriteMap.emplace(std::pair<AnimationType, Sprite>(currentState, s));
+}
+
+void LoadAnimationSprite(const char * a_fileName, AnimationType currentState)
+{
+	
+}
+
+void GLF::DrawAnimatedSprite(AnimationType currentState)
+{
+	Animation.PlayAnimation(currentState);
+}
+

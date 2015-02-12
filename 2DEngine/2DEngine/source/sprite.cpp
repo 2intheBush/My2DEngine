@@ -53,6 +53,14 @@ Sprite::Sprite(const char* a_fileName, int width, int height)
 
 }
 
+void Sprite::UpdateUV(glm::vec2 vOne, glm::vec2 vTwo, glm::vec2 vThree, glm::vec2 vFour)
+{
+	vertex[0].UV = vOne;
+	vertex[1].UV = vTwo;
+	vertex[2].UV = vThree;
+	vertex[3].UV = vFour;
+}
+
 void Sprite::Draw()
 {
 	glEnable(GL_BLEND);
