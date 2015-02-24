@@ -6,7 +6,16 @@
 //glew has to go first.
 #include "GLFW\glfw3.h"
 
+//Forward Decleration
+
+
 enum KeyPressed{
+	Zero = GLFW_KEY_0,
+	One = GLFW_KEY_1,
+	Two = GLFW_KEY_2,
+	Three = GLFW_KEY_3,
+	Four = GLFW_KEY_4,
+	Five = GLFW_KEY_5,
 	w = GLFW_KEY_W,
 	a = GLFW_KEY_A,
 	s = GLFW_KEY_S,
@@ -24,10 +33,11 @@ public:
 	//virtual int excecute() = 0;
 	void HandleInput(GLFWwindow* a_window);
 	int horzAxis, vertAxis;
+	bool IsKeyPressed(KeyPressed key){ return glfwGetKey(window, key); };
 private:
 	GLFWwindow* window;
 
-	bool IsKeyPressed(KeyPressed key){ return glfwGetKey(window, key); };
+	
 
 };
 

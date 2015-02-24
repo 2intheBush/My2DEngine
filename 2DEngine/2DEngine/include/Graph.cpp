@@ -29,6 +29,9 @@ Graph::Graph(unsigned int a_uiNodeCount)
 void Graph::FollowNodePath(Node* N)
 {
 	CurrentNode = N;
+	std::cout << "Current node: " << CurrentNode->NodeNumber << std::endl;
+	std::cout << "The neighbors are:" << std::endl;
+	PrintNeighbors(*g_nNodes[CurrentNode->NodeNumber]);
 }
 
 void Graph::PrintNodes()
