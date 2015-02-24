@@ -70,6 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\Graph.cpp" />
     <ClCompile Include="source\animation.cpp" />
     <ClCompile Include="source\command.cpp" />
     <ClCompile Include="source\font.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="include\command.h" />
     <ClInclude Include="include\font.h" />
     <ClInclude Include="include\framework.h" />
+    <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\sprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
