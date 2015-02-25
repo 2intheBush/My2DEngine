@@ -71,6 +71,75 @@ void Graph::AddNode(Node* g_nNode)
 	g_nNodes.push_back(g_nNode);
 }
 
+void Graph::ResetVisited()
+{
+	for (int i = 0; i < g_nNodes.size(); i++)
+	{
+		g_nNodes[i]->visited = false;
+	}
+}
+
+bool Graph::SearchDFS(Node* Start, Node* End)
+{
+	std::stack <Node*> NodeStack;
+	NodeStack.push(Start);
+	while (!NodeStack.empty())
+	{
+		Node* Current = NodeStack.top();
+		NodeStack.pop();
+		if (Current->visited == true)
+		{
+			continue;
+		}
+		Current->visited = true;
+		if (Current = End)
+		{
+			return true;
+		}
+		for (int i = 0; Current->g_nEdges.size(); i++)
+		{
+			NodeStack.push(Current->g_nEdges[i].g_nEnd);
+		}
+	}
+	return false;
+}
+
+void Graph::PathFromTo(Node* Start, Node* End)
+{
+	std::vector<int> result;
+	if (SearchDFS(Start, End) == true)
+	{
+		std::stack<Node*> NodePath;
+		CurrentNode = Start;
+		NodePath.push(CurrentNode);
+		while (!NodePath.empty())
+		{
+			if (CurrentNode->visited == false)
+			{
+				PathOfNodes.emplace_back(CurrentNode->NodeNumber);
+			}
+			CurrentNode->visited = true;
+			for (int i = 0; i < CurrentNode->g_nEdges.size(); i++)
+			{
+				NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
+				CurrentNode->visited = true;
+				CurrentNode = NodePath.top();
+				if (CurrentNode = End)
+				{
+					PathOfNodes.emplace_back(CurrentNode->NodeNumber);
+					continue;
+				}
+			}
+			NodePath.pop();
+			CurrentNode = NodePath.top();
+		}
+	}
+	else
+	{
+		std::cout << "No path found." << std::endl;
+	}
+}
+
 //void Graph::RemoveNode(Node* g_nNode)
 //{
 //	for (int i = 0; i < g_nNodes.size(); i++)

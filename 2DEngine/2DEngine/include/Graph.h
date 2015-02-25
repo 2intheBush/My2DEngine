@@ -1,6 +1,7 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 #include "framework.h"
+#include <stack>
 
 
 struct Edge;
@@ -12,6 +13,7 @@ public:
 	Node();
 	Node(int a_iNum);
 	int NodeNumber;
+	bool visited;
 	EdgeList g_nEdges;
 };
 
@@ -35,8 +37,14 @@ public:
 	void FollowNodePath(Node* N);
 	void PrintNodes();
 	void PrintNeighbors(Node N);
+
+	bool SearchDFS(Node* Start, Node* End);
+	void PathFromTo(Node* Start, Node* End);
+	std::vector<int> PathOfNodes;
+	void ResetVisited();
 	Node* CurrentNode;
 	NodeList g_nNodes;
+
 };
 
 #endif // _GRAPH_H_

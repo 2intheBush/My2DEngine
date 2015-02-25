@@ -3,11 +3,46 @@
 GLF TwoDEngine;
 Graph g(6);
 
+float keyPressTimer = .25f;
+float keyPressCounter = 0;
+
+void InitGraph();
+void CheckGraphNodeNeighbors();
+
 
 int main()
 {
 	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 
+	InitGraph();
+
+	g.PrintNodes();
+	std::cout << "Select a node to see its neighbors." << std::endl;
+
+	while (TwoDEngine.UpdateFramework())
+	{
+		TwoDEngine.SetScreenColor(0.1f, 0.4f, 0.7f, 0.0f);
+		TwoDEngine.currentFrame = glfwGetTime();
+		TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
+		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
+
+		keyPressCounter += TwoDEngine.deltaTime;
+
+		//CheckGraphNodeNeighbors();
+		g.ResetVisited();
+		g.PathFromTo(g.g_nNodes[0], g.g_nNodes[4]);
+		for (int i = 0; i < g.PathOfNodes.size(); i++)
+		{
+			std::cout << g.g_nNodes[i] << "->";
+		}
+		TwoDEngine.SwapBuffers();
+	}
+
+	TwoDEngine.Shutdown();
+}
+
+void InitGraph()
+{
 	//Edge from 0 to 1
 	Edge e1;
 	e1.g_nStart = g.g_nNodes[0];
@@ -55,54 +90,42 @@ int main()
 	e8.g_nStart = g.g_nNodes[5];
 	e8.g_nEnd = g.g_nNodes[3];
 	g.g_nNodes[5]->g_nEdges.push_back(e8);
-	g.PrintNodes();
-	std::cout << "Select a node to follow." << std::endl;
-	float keyPressTimer = .25f;
-	float keyPressCounter = 0;
-	while (TwoDEngine.UpdateFramework())
+}
+
+void CheckGraphNodeNeighbors()
+{
+	if (keyPressTimer < keyPressCounter)
 	{
-		TwoDEngine.SetScreenColor(0.1f, 0.4f, 0.7f, 0.0f);
-		TwoDEngine.currentFrame = glfwGetTime();
-		TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
-		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
-
-		keyPressCounter += TwoDEngine.deltaTime;
-		if (keyPressTimer < keyPressCounter)
+		if (TwoDEngine.command.IsKeyPressed(Zero))
 		{
-			if (TwoDEngine.command.IsKeyPressed(Zero))
-			{
-				g.FollowNodePath(g.g_nNodes[0]);
-				keyPressCounter = 0;
-			}
-			if (TwoDEngine.command.IsKeyPressed(One))
-			{
-				g.FollowNodePath(g.g_nNodes[1]);
-				keyPressCounter = 0;
-			}
-			if (TwoDEngine.command.IsKeyPressed(Two))
-			{
-				g.FollowNodePath(g.g_nNodes[2]);
-				keyPressCounter = 0;
-			}
-			if (TwoDEngine.command.IsKeyPressed(Three))
-			{
-				g.FollowNodePath(g.g_nNodes[3]);
-				keyPressCounter = 0;
-			}
-			if (TwoDEngine.command.IsKeyPressed(Four))
-			{
-				g.FollowNodePath(g.g_nNodes[4]);
-				keyPressCounter = 0;
-			}
-			if (TwoDEngine.command.IsKeyPressed(Five))
-			{
-				g.FollowNodePath(g.g_nNodes[5]);
-				keyPressCounter = 0;
-			}
-
+			g.FollowNodePath(g.g_nNodes[0]);
+			keyPressCounter = 0;
 		}
-		TwoDEngine.SwapBuffers();
-	}
+		if (TwoDEngine.command.IsKeyPressed(One))
+		{
+			g.FollowNodePath(g.g_nNodes[1]);
+			keyPressCounter = 0;
+		}
+		if (TwoDEngine.command.IsKeyPressed(Two))
+		{
+			g.FollowNodePath(g.g_nNodes[2]);
+			keyPressCounter = 0;
+		}
+		if (TwoDEngine.command.IsKeyPressed(Three))
+		{
+			g.FollowNodePath(g.g_nNodes[3]);
+			keyPressCounter = 0;
+		}
+		if (TwoDEngine.command.IsKeyPressed(Four))
+		{
+			g.FollowNodePath(g.g_nNodes[4]);
+			keyPressCounter = 0;
+		}
+		if (TwoDEngine.command.IsKeyPressed(Five))
+		{
+			g.FollowNodePath(g.g_nNodes[5]);
+			keyPressCounter = 0;
+		}
 
-	TwoDEngine.Shutdown();
+	}
 }
