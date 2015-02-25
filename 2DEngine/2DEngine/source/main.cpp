@@ -18,6 +18,8 @@ int main()
 
 	g.PrintNodes();
 	std::cout << "Select a node to see its neighbors." << std::endl;
+	
+	g.SearchDFS(g.g_nNodes[0], g.g_nNodes[1]);
 
 	while (TwoDEngine.UpdateFramework())
 	{
@@ -30,7 +32,9 @@ int main()
 
 		//CheckGraphNodeNeighbors();
 		g.ResetVisited();
-		g.PathFromTo(g.g_nNodes[0], g.g_nNodes[4]);
+
+
+		//g.PathFromTo(g.g_nNodes[0], g.g_nNodes[4]);
 		for (int i = 0; i < g.PathOfNodes.size(); i++)
 		{
 			std::cout << g.g_nNodes[i] << "->";
@@ -79,17 +83,19 @@ void InitGraph()
 	e6.g_nEnd = g.g_nNodes[5];
 	g.g_nNodes[0]->g_nEdges.push_back(e6);
 
+	//Edge from 5 to 3
+	Edge e8;
+	e8.g_nStart = g.g_nNodes[5];
+	e8.g_nEnd = g.g_nNodes[3];
+	g.g_nNodes[5]->g_nEdges.push_back(e8);
+
 	//Edge from 5 to 4
 	Edge e7;
 	e7.g_nStart = g.g_nNodes[5];
 	e7.g_nEnd = g.g_nNodes[4];
 	g.g_nNodes[5]->g_nEdges.push_back(e7);
 
-	//Edge from 5 to 3
-	Edge e8;
-	e8.g_nStart = g.g_nNodes[5];
-	e8.g_nEnd = g.g_nNodes[3];
-	g.g_nNodes[5]->g_nEdges.push_back(e8);
+
 }
 
 void CheckGraphNodeNeighbors()

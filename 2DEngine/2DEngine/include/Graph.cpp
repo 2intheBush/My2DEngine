@@ -86,22 +86,45 @@ bool Graph::SearchDFS(Node* Start, Node* End)
 	while (!NodeStack.empty())
 	{
 		Node* Current = NodeStack.top();
-		NodeStack.pop();
 		if (Current->visited == true)
 		{
+			NodeStack.pop();
 			continue;
 		}
 		Current->visited = true;
-		if (Current = End)
+		std::cout << Current->NodeNumber << "-> ";
+		if (Current == End)
 		{
+			std::cout << "End!";
 			return true;
 		}
-		for (int i = 0; Current->g_nEdges.size(); i++)
+		if (Current->g_nEdges.empty() || CheckNodeEdges(Current))
 		{
-			NodeStack.push(Current->g_nEdges[i].g_nEnd);
+			NodeStack.pop();
+			continue;
 		}
+		else
+		{
+			for (int i = 0; i < Current->g_nEdges.size(); i++)
+			{
+				NodeStack.push(Current->g_nEdges[i].g_nEnd);
+			}
+		}
+
+		//NodeStack.pop();
 	}
 	return false;
+}
+
+bool Graph::CheckNodeEdges(Node* N)
+{
+	for (int i = 0; i < N->g_nEdges.size(); i++)
+	{
+		if (N->g_nEdges[i].g_nEnd->visited == false)
+		{
+			return false;
+		}
+	}
 }
 
 void Graph::PathFromTo(Node* Start, Node* End)
@@ -111,8 +134,28 @@ void Graph::PathFromTo(Node* Start, Node* End)
 	{
 		std::stack<Node*> NodePath;
 		CurrentNode = Start;
+		CurrentNode->visited = true;
 		NodePath.push(CurrentNode);
 		while (!NodePath.empty())
+		{
+			for (int i = 0; i < CurrentNode->g_nEdges.size(); i++)
+			{
+				NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
+			}
+			CurrentNode = NodePath.top();
+			CurrentNode->visited = true;
+			if (CurrentNode == End)
+			{
+				continue;
+			}
+			else
+			{
+				NodePath.pop();
+			}
+			CurrentNode = NodePath.top();
+			CurrentNode->visited = true;
+		}
+		/*while (!NodePath.empty())
 		{
 			if (CurrentNode->visited == false)
 			{
@@ -121,18 +164,21 @@ void Graph::PathFromTo(Node* Start, Node* End)
 			CurrentNode->visited = true;
 			for (int i = 0; i < CurrentNode->g_nEdges.size(); i++)
 			{
-				NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
-				CurrentNode->visited = true;
-				CurrentNode = NodePath.top();
-				if (CurrentNode = End)
+				if (CurrentNode->visited = false)
 				{
-					PathOfNodes.emplace_back(CurrentNode->NodeNumber);
-					continue;
+					NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
+					CurrentNode->visited = true;
+					CurrentNode = NodePath.top();
+					if (CurrentNode = End)
+					{
+						PathOfNodes.emplace_back(CurrentNode->NodeNumber);
+						continue;
+					}
 				}
 			}
 			NodePath.pop();
 			CurrentNode = NodePath.top();
-		}
+		}*/
 	}
 	else
 	{

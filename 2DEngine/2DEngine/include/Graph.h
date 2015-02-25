@@ -39,6 +39,7 @@ public:
 	void PrintNeighbors(Node N);
 
 	bool SearchDFS(Node* Start, Node* End);
+	bool CheckNodeEdges(Node* N);
 	void PathFromTo(Node* Start, Node* End);
 	std::vector<int> PathOfNodes;
 	void ResetVisited();
