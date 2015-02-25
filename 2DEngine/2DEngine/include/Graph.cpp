@@ -28,6 +28,7 @@ Graph::Graph(unsigned int a_uiNodeCount)
 
 void Graph::FollowNodePath(Node* N)
 {
+	Node* CurrentNode;
 	CurrentNode = N;
 	std::cout << "Current node: " << CurrentNode->NodeNumber << std::endl;
 	std::cout << "The neighbors are:" << std::endl;
@@ -98,7 +99,7 @@ bool Graph::SearchDFS(Node* Start, Node* End)
 			std::cout << "End!";
 			return true;
 		}
-		if (Current->g_nEdges.empty() || CheckNodeEdges(Current))
+		if (Current->g_nEdges.empty() || CheckVisitedEdges(Current))
 		{
 			NodeStack.pop();
 			continue;
@@ -110,13 +111,11 @@ bool Graph::SearchDFS(Node* Start, Node* End)
 				NodeStack.push(Current->g_nEdges[i].g_nEnd);
 			}
 		}
-
-		//NodeStack.pop();
 	}
 	return false;
 }
 
-bool Graph::CheckNodeEdges(Node* N)
+bool Graph::CheckVisitedEdges(Node* N)
 {
 	for (int i = 0; i < N->g_nEdges.size(); i++)
 	{
@@ -127,63 +126,21 @@ bool Graph::CheckNodeEdges(Node* N)
 	}
 }
 
-void Graph::PathFromTo(Node* Start, Node* End)
+bool Graph::GScoreCompare(Node* left, Node* right)
 {
-	std::vector<int> result;
-	if (SearchDFS(Start, End) == true)
+	return(left->gScore < right->gScore);
+}
+
+void Graph::ShortestPathDijkstra(Node* Start, Node* End)
+{
+	
+	Node* CurrentNode;
+	for (int i = 0; i < g_nNodes.size(); i++)
 	{
-		std::stack<Node*> NodePath;
-		CurrentNode = Start;
-		CurrentNode->visited = true;
-		NodePath.push(CurrentNode);
-		while (!NodePath.empty())
-		{
-			for (int i = 0; i < CurrentNode->g_nEdges.size(); i++)
-			{
-				NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
-			}
-			CurrentNode = NodePath.top();
-			CurrentNode->visited = true;
-			if (CurrentNode == End)
-			{
-				continue;
-			}
-			else
-			{
-				NodePath.pop();
-			}
-			CurrentNode = NodePath.top();
-			CurrentNode->visited = true;
-		}
-		/*while (!NodePath.empty())
-		{
-			if (CurrentNode->visited == false)
-			{
-				PathOfNodes.emplace_back(CurrentNode->NodeNumber);
-			}
-			CurrentNode->visited = true;
-			for (int i = 0; i < CurrentNode->g_nEdges.size(); i++)
-			{
-				if (CurrentNode->visited = false)
-				{
-					NodePath.push(CurrentNode->g_nEdges[i].g_nEnd);
-					CurrentNode->visited = true;
-					CurrentNode = NodePath.top();
-					if (CurrentNode = End)
-					{
-						PathOfNodes.emplace_back(CurrentNode->NodeNumber);
-						continue;
-					}
-				}
-			}
-			NodePath.pop();
-			CurrentNode = NodePath.top();
-		}*/
+		g_nNodes[i]->nScore = NULL;
+		g_nNodes[i]->gScore = INFINITY;
 	}
-	else
-	{
-		std::cout << "No path found." << std::endl;
-	}
+
 }
 
 //void Graph::RemoveNode(Node* g_nNode)

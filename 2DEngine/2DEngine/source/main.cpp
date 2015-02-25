@@ -19,7 +19,7 @@ int main()
 	g.PrintNodes();
 	std::cout << "Select a node to see its neighbors." << std::endl;
 	
-	g.SearchDFS(g.g_nNodes[0], g.g_nNodes[1]);
+	g.SearchDFS(g.g_nNodes[0], g.g_nNodes[2]);
 
 	while (TwoDEngine.UpdateFramework())
 	{

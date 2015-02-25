@@ -3,7 +3,6 @@
 #include "framework.h"
 #include <stack>
 
-
 struct Edge;
 
 class Node
@@ -14,6 +13,8 @@ public:
 	Node(int a_iNum);
 	int NodeNumber;
 	bool visited;
+	Node* nScore;
+	float gScore;
 	EdgeList g_nEdges;
 };
 
@@ -22,6 +23,7 @@ struct Edge
 	Node* g_nStart;
 	Node* g_nEnd;
 	float g_nCost;
+
 };
 
 class Graph
@@ -39,11 +41,12 @@ public:
 	void PrintNeighbors(Node N);
 
 	bool SearchDFS(Node* Start, Node* End);
-	bool CheckNodeEdges(Node* N);
-	void PathFromTo(Node* Start, Node* End);
+	bool CheckVisitedEdges(Node* N);
+	bool GScoreCompare(Node* left, Node* right);
+	void ShortestPathDijkstra(Node* Start, Node* End);
+
 	std::vector<int> PathOfNodes;
 	void ResetVisited();
-	Node* CurrentNode;
 	NodeList g_nNodes;
 
 };
