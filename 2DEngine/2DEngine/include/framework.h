@@ -31,7 +31,7 @@ public:
 	void DrawAnimatedSprite(AnimationType currentState);
 
 
-	unsigned int CreateSprite(const char* a_fileName, int width, int height);
+	unsigned int CreateSprite(const char* a_fileName, int width, int height, float x, float y);
 	void DrawSprite(unsigned int s);
 	void MoveSprite(unsigned int s, float x, float y);
 	void UpdateVertex(unsigned int s);

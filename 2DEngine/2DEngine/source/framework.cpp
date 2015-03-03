@@ -171,9 +171,9 @@ void GLF::SwapBuffers()
 	glfwPollEvents();
 }
 
-unsigned int GLF::CreateSprite(const char* a_fileName, int width, int height)
+unsigned int GLF::CreateSprite(const char* a_fileName, int width, int height, float x, float y)
 {
-	Sprite s(a_fileName, width, height);
+	Sprite s(a_fileName, width, height, x, y);
 	mSpriteList.emplace_back(s);
 	return mSpriteList.size() - 1;
 }
@@ -202,8 +202,8 @@ void GLF::CreateAnimation(const char * a_fileName, AnimationType currentState, f
 {
 
 	Animation.LoadAnimationUV(a_fileName, currentState);
-	Sprite s(a_fileName, width, height);
-	Animation.AnimatedSpriteMap.emplace(std::pair<AnimationType, Sprite>(currentState, s));
+	//Sprite s(a_fileName, width, height);
+	//Animation.AnimatedSpriteMap.emplace(std::pair<AnimationType, Sprite>(currentState, s));
 }
 
 void LoadAnimationSprite(const char * a_fileName, AnimationType currentState)
