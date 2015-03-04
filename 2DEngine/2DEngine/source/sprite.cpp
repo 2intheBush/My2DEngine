@@ -28,7 +28,7 @@ unsigned int Sprite::loadTexture(const char* o_fileName, int & a_iWidth, int & a
 	}
 }
 
-Sprite::Sprite(const char* a_fileName, int width, int height, float a_x, float a_y)
+Sprite::Sprite(const char* a_fileName, int width, int height)
 {
 	int imageWidth, imageHeight;
 	bpp = 4;
@@ -36,8 +36,6 @@ Sprite::Sprite(const char* a_fileName, int width, int height, float a_x, float a
 	//uniform values for vertices
 	sWidth = width;
 	sHeight = height;
-	x = a_x;
-	y = a_y;
 
 	vertex[0].position = glm::vec4(x - sWidth, y - sHeight, 0, 1);
 	vertex[1].position = glm::vec4(x - sWidth, y + sHeight, 0, 1);

@@ -25,14 +25,15 @@ public:
 	void Shutdown();
 	bool UpdateFramework();
 	void SwapBuffers();
-	
+	void GetCursPos(double &xPos, double &yPos);
+
 	void CreateAnimation(const char * a_fileName, AnimationType currentState, float width, float height);
 	void LoadAnimationSprite(const char * a_fileName, AnimationType currentState);
 	void DrawAnimatedSprite(AnimationType currentState);
 
 
-	unsigned int CreateSprite(const char* a_fileName, int width, int height, float x, float y);
-	void DrawSprite(unsigned int s);
+	unsigned int CreateSprite(const char* a_fileName, int width, int height);
+	void DrawSprites(unsigned int s);
 	void MoveSprite(unsigned int s, float x, float y);
 	void UpdateVertex(unsigned int s);
 };

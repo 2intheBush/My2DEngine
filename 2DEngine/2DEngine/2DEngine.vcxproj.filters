@@ -60,4 +60,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\images\greenbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\images\redbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\images\currentbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\images\goalbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

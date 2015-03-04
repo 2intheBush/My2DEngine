@@ -87,6 +87,12 @@
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\sprite.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\images\currentbox.png" />
+    <Image Include="resources\images\goalbox.png" />
+    <Image Include="resources\images\greenbox.png" />
+    <Image Include="resources\images\redbox.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

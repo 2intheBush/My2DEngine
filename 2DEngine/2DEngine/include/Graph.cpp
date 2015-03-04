@@ -2,124 +2,107 @@
 
 void Node::AddAdjacentNode(Node* adj, float f_cost)
 {
+	
 	Edge newEdge(this, adj, f_cost);
 	EdgeList.push_back(newEdge);
 }
 
-void Graph::AddNodes(int row, int col)
+void Graph::CreateGrid(int numOfNodes, int xStart, int yStart)
 {
-	for (int i = 0; i < row; i++)
+	xPos = xStart;
+	yPos = yStart;
+	for (int i = 0; i < sqrt(numOfNodes); i++)
 	{
-		for (int j = 0; j < col; j++)
+		for (int j = 0; j < sqrt(numOfNodes); j++)
 		{
-			Node* n = new Node(i, j);
+			Node* n = new Node(25, 25, j, i);
 			NodeList.push_back(n);
+			yIncrease = n->height * 2;
+			n->x = xPos;
+			n->y = yPos;
+			if (j == sqrt(numOfNodes) - 1)
+			{
+				xPos = xStart;
+			}
+			else
+			{
+				xPos += n->width * 2;
+			}
 		}
+		yPos += yIncrease;
+		colSize = rowSize += 1;
 	}
+}
+
+void Graph::AddEdge(Node* n, int a_rowPos, int a_colPos)
+{
+	Node* second = GetNode(a_rowPos, a_colPos);
+	Edge e(n, second, 1);
+	n->EdgeList.push_back(e);
 }
 
 void Graph::AddEdgesToNodes()
 {
-	for (int i = 0; i < row; i++)
+	for (auto node : NodeList)
 	{
-		for (int j = 0; j < col; j++)
+		//North edge
+		if (node->rowPos + 1 < rowSize)
 		{
-			//first row
-			if (i < 1)
+			AddEdge(node, node->rowPos + 1, node->colPos);
+		}
+		//south edge
+		if (node->rowPos - 1 >0)
+		{
+			AddEdge(node, node->rowPos - 1, node->colPos);
+		}
+		//east edge
+		if (node->colPos + 1 < colSize)
+		{
+			AddEdge(node, node->rowPos, node->colPos + 1);
+		}
+		//west edge
+		if (node->colPos - 1 < colSize)
+		{
+			AddEdge(node, node->rowPos, node->colPos - 1);
+		}
+	}
+}
+
+void Graph::Dijkstra(Node* start, Node* goal)
+{
+	for (auto node : NodeList)
+	{
+		node->nScore = NULL;
+		node->gScore = INFINITY;
+	}
+	std::stack<Node*> NodeStack;
+	NodeStack.push(start);
+
+	while (!NodeStack.empty())
+	{
+		Node* currentNode = NodeStack.top();
+		NodeStack.pop();
+		currentNode->nScore = currentNode;
+		currentNode->gScore = 0;
+		currentNode->isVisited = true;
+		std::cout << currentNode << std::endl;
+
+		for (auto Edge : currentNode->EdgeList)
+		{
+			//what about when end is null!!!!
+			Node* end = Edge.destNode;
+			if (end->isVisited == false)
 			{
-				//first node
-				if (j < 1)
+				currentNode->gScore += Edge.getCost();
+				if (Edge.cost <= end->gScore)
 				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
-				}
-				//last node in row
-				else if (j == col)
-				{
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
-				}
-				//rest of nodes
-				else
-				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
-				}
-			}
-			//last row
-			else if (i == row)
-			{
-				//first node
-				if (j < 1)
-				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-				}
-				//last node in row
-				else if (j == col)
-				{
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-				}
-				//rest of nodes
-				else
-				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-				}
-			}
-			//rest of rows
-			else
-			{
-				//first node
-				if (j < 1)
-				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
-				}
-				//last node in row
-				else if (j == col)
-				{
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
-				}
-				//rest of nodes
-				else
-				{
-					//edge to the right
-					NodeList[i][j].AddAdjacentNode(&NodeList[i + 1][j], 1);
-					//edge to the left
-					NodeList[i][j].AddAdjacentNode(&NodeList[i - 1][j], 1);
-					//edge up
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j - 1], 1);
-					//edge down
-					NodeList[i][j].AddAdjacentNode(&NodeList[i][j + 1], 1);
+					end->nScore = currentNode;
+					end->gScore = currentNode->gScore + Edge.getCost();
+					NodeStack.push(end);
 				}
 			}
 		}
 	}
+
 }
+

@@ -171,14 +171,14 @@ void GLF::SwapBuffers()
 	glfwPollEvents();
 }
 
-unsigned int GLF::CreateSprite(const char* a_fileName, int width, int height, float x, float y)
+unsigned int GLF::CreateSprite(const char* a_fileName, int width, int height)
 {
-	Sprite s(a_fileName, width, height, x, y);
+	Sprite s(a_fileName, width, height);
 	mSpriteList.emplace_back(s);
 	return mSpriteList.size() - 1;
 }
 
-void GLF::DrawSprite(unsigned int s)
+void GLF::DrawSprites(unsigned int s)
 {
 	mSpriteList[s].Draw();
 }
@@ -214,5 +214,10 @@ void LoadAnimationSprite(const char * a_fileName, AnimationType currentState)
 void GLF::DrawAnimatedSprite(AnimationType currentState)
 {
 	Animation.PlayAnimation(currentState);
+}
+
+void GLF::GetCursPos(double &xPos, double &yPos)
+{
+	glfwGetCursorPos(window, &xPos, &yPos);
 }
 

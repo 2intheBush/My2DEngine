@@ -18,17 +18,24 @@ struct Edge
 	Node* getOrgNode(){ return orgNode; };
 	Node* getDestNode(){ return destNode; };
 	float getCost(){ return cost; };
+	float cost;
+	Node* destNode;
 private:
 	Node* orgNode;
-	Node* destNode;
-	float cost;
+
+
 };
 
 class Node
 {
 public:
 	
-	Node(int x_id, int y_id){ width = height = 25; isVisited = false; };
+	Node(int a_width, int a_height, int a_colPos, int a_rowPos)
+	{ 
+		rowPos = a_rowPos; colPos = a_colPos;  
+		width = a_width; height = a_height; 
+		isVisited = false; 
+	};
 	~Node(){};
 	int ReturnCoord(){ return x , y; };
 	bool CheckIfVisited(){ return isVisited; };
@@ -36,10 +43,13 @@ public:
 	void SetNotVisited(){ isVisited = false; };
 	void AddAdjacentNode(Node* adj, float f_cost);
 	unsigned int spriteID;
-	float width, height, x, y;
-private:
-	bool isVisited;
+	int gScore;
+	Node* nScore;
+	int width, height, x, y, rowPos, colPos;
 	std::vector<Edge>EdgeList;
+	bool isVisited;
+private:
+
 };
 
 class Graph
@@ -52,13 +62,25 @@ public:
 			delete NodeList[i];
 		}
 	};
-	void AddNodes(int row, int col);
+	void CreateGrid(int numOfNodes, int xStart, int yStart);
 	void SetRow();
-	Node* GetNode(int i_Node){ return NodeList[i_Node]; };
+	void AddEdge(Node* n, int a_rowPos, int a_colPos);
+	Node* GetNode(int a_rowPos, int a_colPos)
+	{ 
+		for (auto node : NodeList)
+		{
+			if (node->rowPos == a_rowPos && node->colPos == a_colPos)
+			{
+				return node;
+			}
+		}
+	};
 	void AddEdgesToNodes();
+	void Dijkstra(Node* start, Node* goal);
+
 	std::vector<Node* >NodeList;
+	int rowSize, colSize, xPos, yPos, yIncrease;
 private:
-	int row, col;
 
 };
 

@@ -41,7 +41,7 @@ public:
 	unsigned int spriteID;
 	unsigned int loadTexture(const char* o_fileName, int & a_iWidth, int & a_iHeight, int & a_iBPP);
 	void UpdateUV(glm::vec2 vOne, glm::vec2 vTwo, glm::vec2 Vec3, glm::vec2 vFour);
-	Sprite(const char* a_fileName, int width, int height, float x, float y);
+	Sprite(const char* a_fileName, int width, int height);
 	void Draw();
 };
 
