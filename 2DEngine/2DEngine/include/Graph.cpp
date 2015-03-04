@@ -51,7 +51,7 @@ void Graph::AddEdgesToNodes()
 			AddEdge(node, node->rowPos + 1, node->colPos);
 		}
 		//south edge
-		if (node->rowPos - 1 >0)
+		if (node->rowPos - 1 >= 0)
 		{
 			AddEdge(node, node->rowPos - 1, node->colPos);
 		}
@@ -61,7 +61,7 @@ void Graph::AddEdgesToNodes()
 			AddEdge(node, node->rowPos, node->colPos + 1);
 		}
 		//west edge
-		if (node->colPos - 1 < colSize)
+		if (node->colPos - 1 >= 0)
 		{
 			AddEdge(node, node->rowPos, node->colPos - 1);
 		}
@@ -75,30 +75,41 @@ void Graph::Dijkstra(Node* start, Node* goal)
 		node->nScore = NULL;
 		node->gScore = INFINITY;
 	}
+
 	std::stack<Node*> NodeStack;
 	NodeStack.push(start);
+
 
 	while (!NodeStack.empty())
 	{
 		Node* currentNode = NodeStack.top();
+		if (currentNode == goal)
+		{
+			for (int i = 0; i < NodeStack.size(); i++)
+			{
+				NodeStack.pop();
+				std::cout << "found the End!" << std::endl;
+			}
+			continue;
+		}
+		currentNode = NodeStack.top();
 		NodeStack.pop();
 		currentNode->nScore = currentNode;
 		currentNode->gScore = 0;
 		currentNode->isVisited = true;
-		std::cout << currentNode << std::endl;
 
 		for (auto Edge : currentNode->EdgeList)
 		{
-			//what about when end is null!!!!
 			Node* end = Edge.destNode;
 			if (end->isVisited == false)
 			{
 				currentNode->gScore += Edge.getCost();
-				if (Edge.cost <= end->gScore)
+				if (Edge.cost <= currentNode->gScore)
 				{
 					end->nScore = currentNode;
 					end->gScore = currentNode->gScore + Edge.getCost();
 					NodeStack.push(end);
+		
 				}
 			}
 		}

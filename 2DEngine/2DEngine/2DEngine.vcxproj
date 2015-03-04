@@ -92,6 +92,7 @@
     <Image Include="resources\images\goalbox.png" />
     <Image Include="resources\images\greenbox.png" />
     <Image Include="resources\images\redbox.png" />
+    <Image Include="resources\images\wallbox.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

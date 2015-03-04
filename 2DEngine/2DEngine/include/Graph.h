@@ -77,8 +77,11 @@ public:
 	};
 	void AddEdgesToNodes();
 	void Dijkstra(Node* start, Node* goal);
+	bool NodeCompare(Node* left, Node* right);
+	//std::list<Node*> BuildPath();
 
 	std::vector<Node* >NodeList;
+	//std::list<Node*> NodePath;
 	int rowSize, colSize, xPos, yPos, yIncrease;
 private:
 

@@ -11,29 +11,28 @@ void InitSprites();
 void SetSprites();
 
 float a_x, a_y;
-unsigned int trueSprite, falseSprite, currentSprite, goalSprite;
+unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite;
 double cursX, cursY;
 int main() 
 {
 	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 	
 	a_x = a_y = 0;
-	grid.CreateGrid(100, 100, 100);
+	grid.CreateGrid(144, 100, 100);
 	grid.AddEdgesToNodes();
 	InitSprites();
 
 	Node* startNode,* goalNode;
-	startNode = grid.NodeList[15];
-	goalNode = grid.NodeList[80];
+	startNode = grid.NodeList[3];
+	goalNode = grid.NodeList[143];
 
-	grid.Dijkstra(startNode, goalNode);
+	// grid.Dijkstra(startNode, goalNode);
 	
-	SetSprites();
-
+	
 	startNode->spriteID = currentSprite;
 	goalNode->spriteID = goalSprite;
 
-
+	SetSprites();
 
 	while (TwoDEngine.UpdateFramework())
 	{
@@ -45,25 +44,31 @@ int main()
 		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
 		keyPressCounter += TwoDEngine.deltaTime;
 		
+
+		if (TwoDEngine.command.IsKeyPressed(s))
+		{
+
+			int x = ((cursX - 75) / 50);
+			int y = ((cursY - 75) / 50);
+			Node* n = grid.GetNode(y,x);
+			n->isVisited = true;
+			n->spriteID = wallSprite;
+		}
+
+		if (TwoDEngine.command.IsKeyPressed(spacebar))
+		{
+			grid.Dijkstra(startNode, goalNode);
+		}
+
+		//for (auto node : grid.NodePath)
+		//{
+		//	node->spriteID = 3;
+		//}
 		for (auto node : grid.NodeList)
 		{
 			TwoDEngine.MoveSprite(node->spriteID, node->x, node->y);
 			TwoDEngine.DrawSprites(node->spriteID);
 		}
-
-
-
-
-		//for (auto node : grid.NodeList)
-		//{
-		//	if (cursX > node->x &&
-		//		cursX < node->x + (node->width) &&
-		//		cursY > node->y &&
-		//		cursY < node->y + (node->height))
-		//	{
-		//		node->spriteID = trueSprite;
-		//	}
-		//}
 
 		TwoDEngine.SwapBuffers();
 
@@ -78,6 +83,8 @@ void InitSprites()
 	falseSprite = TwoDEngine.CreateSprite("resources\\images\\greenbox.png", 25, 25);
 
 	trueSprite = TwoDEngine.CreateSprite("resources\\images\\redbox.png", 25, 25);
+
+	wallSprite = TwoDEngine.CreateSprite("resources\\images\\wallbox.png", 25, 25);
 
 	currentSprite = TwoDEngine.CreateSprite("resources\\images\\currentbox.png", 25, 25);
 
