@@ -1,7 +1,9 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 #include "framework.h"
+#include <algorithm>
 #include <stack>
+#include <list>
 
 //forward decleration
 class Node;
@@ -34,7 +36,7 @@ public:
 	{ 
 		rowPos = a_rowPos; colPos = a_colPos;  
 		width = a_width; height = a_height; 
-		isVisited = false; 
+		isVisited = false, isWall = false; 
 	};
 	~Node(){};
 	int ReturnCoord(){ return x , y; };
@@ -44,10 +46,10 @@ public:
 	void AddAdjacentNode(Node* adj, float f_cost);
 	unsigned int spriteID;
 	int gScore;
-	Node* nScore;
+	Node* previous;
 	int width, height, x, y, rowPos, colPos;
 	std::vector<Edge>EdgeList;
-	bool isVisited;
+	bool isVisited, isWall;
 private:
 
 };
@@ -76,12 +78,12 @@ public:
 		}
 	};
 	void AddEdgesToNodes();
-	void Dijkstra(Node* start, Node* goal);
-	bool NodeCompare(Node* left, Node* right);
+	//void Dijkstra(Node* start, Node* goal);
+	//bool NodeCompare(Node* lhs, Node* rhs);
 	//std::list<Node*> BuildPath();
-
+	void DeleteNodesEdges(Node* n);
 	std::vector<Node* >NodeList;
-	//std::list<Node*> NodePath;
+	std::list<Node*> result;
 	int rowSize, colSize, xPos, yPos, yIncrease;
 private:
 

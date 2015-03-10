@@ -15,7 +15,7 @@ void Graph::CreateGrid(int numOfNodes, int xStart, int yStart)
 	{
 		for (int j = 0; j < sqrt(numOfNodes); j++)
 		{
-			Node* n = new Node(25, 25, j, i);
+			Node* n = new Node(25, 25, i, j);
 			NodeList.push_back(n);
 			yIncrease = n->height * 2;
 			n->x = xPos;
@@ -68,52 +68,64 @@ void Graph::AddEdgesToNodes()
 	}
 }
 
-void Graph::Dijkstra(Node* start, Node* goal)
+//void Graph::Dijkstra(Node* start, Node* goal)
+//{
+//	for (auto node : NodeList)
+//	{
+//		node->previous = NULL;
+//		node->gScore = INFINITY;
+//	}
+//
+//	std::list<Node*> NodeStack;
+//	NodeStack.push_front(start);
+//
+//
+//	while (!NodeStack.empty())
+//	{
+//		NodeStack.sort(NodeCompare);
+//		Node* currentNode = NodeStack.front();
+//		if (currentNode == goal)
+//		{
+//			std::cout << "found the End!" << std::endl;
+//			//sort nodes
+//
+//			//for (int i = 0; i < NodeStack.size(); i++)
+//			//{
+//			//	NodeStack.pop();
+//			//}
+//			break;
+//		}
+//		currentNode = NodeStack.front();
+//		NodeStack.pop_front();
+//		currentNode->previous = currentNode;
+//		currentNode->gScore = 0;
+//		currentNode->isVisited = true;
+//
+//		for (auto Edge : currentNode->EdgeList)
+//		{
+//			Node* end = Edge.destNode;
+//			if (end->isVisited == false)
+//			{
+//				currentNode->gScore += Edge.getCost();
+//				if (Edge.cost <= currentNode->gScore)
+//				{
+//					end->previous = currentNode;
+//					end->gScore = currentNode->gScore + Edge.getCost();
+//					NodeStack.push_front(end);
+//		
+//				}
+//			}
+//		}
+//	}
+//	std::cout << goal << std::endl;
+//}
+
+void Graph::DeleteNodesEdges(Node* n)
 {
-	for (auto node : NodeList)
-	{
-		node->nScore = NULL;
-		node->gScore = INFINITY;
-	}
-
-	std::stack<Node*> NodeStack;
-	NodeStack.push(start);
-
-
-	while (!NodeStack.empty())
-	{
-		Node* currentNode = NodeStack.top();
-		if (currentNode == goal)
-		{
-			for (int i = 0; i < NodeStack.size(); i++)
-			{
-				NodeStack.pop();
-				std::cout << "found the End!" << std::endl;
-			}
-			continue;
-		}
-		currentNode = NodeStack.top();
-		NodeStack.pop();
-		currentNode->nScore = currentNode;
-		currentNode->gScore = 0;
-		currentNode->isVisited = true;
-
-		for (auto Edge : currentNode->EdgeList)
-		{
-			Node* end = Edge.destNode;
-			if (end->isVisited == false)
-			{
-				currentNode->gScore += Edge.getCost();
-				if (Edge.cost <= currentNode->gScore)
-				{
-					end->nScore = currentNode;
-					end->gScore = currentNode->gScore + Edge.getCost();
-					NodeStack.push(end);
-		
-				}
-			}
-		}
-	}
-
+	n->isWall = true;
 }
 
+//bool NodeCompare(Node* lhs, Node* rhs)
+//{
+//	return lhs->gScore < rhs->gScore;
+//}

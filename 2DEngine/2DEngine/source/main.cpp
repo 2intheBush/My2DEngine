@@ -9,6 +9,10 @@ float keyPressCounter = 0;
 
 void InitSprites();
 void SetSprites();
+void Dijkstra(Node* start, Node* goal);
+bool NodeCompare(Node* lhs, Node* rhs);
+bool HeuristicCompare(Node* lhs, Node* rhs);
+float GetHeuristic(Node* n);
 
 float a_x, a_y;
 unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite;
@@ -23,8 +27,8 @@ int main()
 	InitSprites();
 
 	Node* startNode,* goalNode;
-	startNode = grid.NodeList[3];
-	goalNode = grid.NodeList[143];
+	startNode = grid.NodeList[13];
+	goalNode = grid.NodeList[130];
 
 	// grid.Dijkstra(startNode, goalNode);
 	
@@ -32,7 +36,6 @@ int main()
 	startNode->spriteID = currentSprite;
 	goalNode->spriteID = goalSprite;
 
-	SetSprites();
 
 	while (TwoDEngine.UpdateFramework())
 	{
@@ -43,21 +46,22 @@ int main()
 		TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
 		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
 		keyPressCounter += TwoDEngine.deltaTime;
-		
 
 		if (TwoDEngine.command.IsKeyPressed(s))
 		{
 
 			int x = ((cursX - 75) / 50);
 			int y = ((cursY - 75) / 50);
-			Node* n = grid.GetNode(y,x);
-			n->isVisited = true;
+			Node* n = grid.GetNode(x,y);
+			grid.DeleteNodesEdges(n);
 			n->spriteID = wallSprite;
 		}
 
 		if (TwoDEngine.command.IsKeyPressed(spacebar))
 		{
-			grid.Dijkstra(startNode, goalNode);
+			Dijkstra(startNode, goalNode);
+			SetSprites();
+
 		}
 
 		//for (auto node : grid.NodePath)
@@ -77,7 +81,6 @@ int main()
 	TwoDEngine.Shutdown();
 }
 
-
 void InitSprites()
 {
 	falseSprite = TwoDEngine.CreateSprite("resources\\images\\greenbox.png", 25, 25);
@@ -94,7 +97,7 @@ void InitSprites()
 
 void SetSprites()
 {
-	for (auto node : grid.NodeList)
+	for (auto node : grid.result)
 	{
 		if (node->isVisited == true)
 		{
@@ -103,6 +106,80 @@ void SetSprites()
 	}
 }
 
+void Dijkstra(Node* start, Node* goal)
+{
+	for (auto node : grid.NodeList)
+	{
+		node->previous = NULL;
+		node->gScore = INT_MAX;
+	}
 
+	std::list<Node*> NodeStack;
+	NodeStack.push_front(start);
 
-	
+	while (!NodeStack.empty())
+	{
+		NodeStack.sort(NodeCompare);
+		Node* currentNode = NodeStack.front();
+
+		if (currentNode == goal)
+		{
+			std::cout << "found the End!" << std::endl;
+			break;
+		}
+		NodeStack.pop_front();
+		currentNode->gScore = 0;
+		currentNode->isVisited = true;
+
+		for (auto Edge : currentNode->EdgeList)
+		{
+			Node* end = Edge.destNode;
+			if (!end->isVisited && !end->isWall)
+			{
+				float calcCost = currentNode->gScore + Edge.cost;
+				if (calcCost < end->gScore)
+				{
+					end->previous = currentNode;
+					end->gScore = calcCost;
+					if (std::find(NodeStack.begin(), NodeStack.end(), end) == NodeStack.end())
+					{
+						NodeStack.push_back(end);
+					}
+
+				}
+			}
+		}
+	}
+	Node* cNode = goal;
+	if (cNode->previous == nullptr)
+	{
+		return;
+	}
+	grid.result.push_front(cNode);
+	Node* parent = cNode->previous;
+	grid.result.push_front(parent);
+ 	while (parent != start)
+	{
+		parent = parent->previous;
+		grid.result.push_front(parent);
+	}
+	for (auto node : grid.result)
+	{
+		std::cout << node->rowPos + 1 << ", " << node->colPos + 1 << std::endl;
+	}
+}
+
+bool NodeCompare(Node* lhs, Node* rhs)
+{
+	return lhs->gScore < rhs->gScore;
+}
+
+bool HeuristicCompare(Node* lhs, Node* rhs)
+{
+	return lhs->gScore + GetHeuristic(lhs) < rhs->gScore + GetHeuristic(rhs);
+}
+
+float GetHeuristic(Node* n)
+{
+	return 0;
+}
