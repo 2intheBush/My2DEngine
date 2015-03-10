@@ -28,7 +28,7 @@ int main()
 
 	Node* startNode,* goalNode;
 	startNode = grid.NodeList[13];
-	goalNode = grid.NodeList[130];
+	goalNode = grid.NodeList[140];
 
 	// grid.Dijkstra(startNode, goalNode);
 	
