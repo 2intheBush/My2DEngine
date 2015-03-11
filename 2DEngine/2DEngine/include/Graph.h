@@ -93,6 +93,8 @@ public:
 			}
 		}
 	};
+	Node* FindNodeLine(float xCord, float yCord);
+	Box AABB(Node* n);
 	void AddEdgesToNodes();
 	//void Dijkstra(Node* start, Node* goal);
 	//bool NodeCompare(Node* lhs, Node* rhs);
@@ -100,7 +102,7 @@ public:
 	void DeleteNodesEdges(Node* n);
 	std::vector<Node* >NodeList;
 	std::vector<Node*> result;
-	std::list<Node*> resultSmoothed;
+	//std::list<Node*> resultSmoothed;
 	int rowSize, colSize, xPos, yPos, yIncrease;
 private:
 

@@ -129,3 +129,23 @@ void Graph::DeleteNodesEdges(Node* n)
 //{
 //	return lhs->gScore < rhs->gScore;
 //}
+
+
+Node* Graph::FindNodeLine(float xCord, float yCord)
+{
+	for (auto node : NodeList)
+	{
+		Box b = AABB(node);
+		if (b.minPoint.x < xCord &&b.minPoint.y < yCord && b.maxPoint.x > xCord && b.maxPoint.y > yCord)
+		{
+			return node;
+		}
+	}
+}
+
+Box Graph::AABB(Node* n)
+{
+	glm::vec2 min(n->x - n->width, n->y - n->height);
+	glm::vec2 max(n->x + n->width, n->y + n->height);
+	return Box(min, max);
+}
