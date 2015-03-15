@@ -77,6 +77,7 @@
     <ClCompile Include="source\framework.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\sprite.cpp" />
+    <ClCompile Include="source\Tank.cpp" />
     <ClCompile Include="source\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +87,7 @@
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\sprite.h" />
+    <ClInclude Include="include\Tank.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\images\currentbox.png" />

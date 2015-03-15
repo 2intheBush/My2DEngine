@@ -68,84 +68,10 @@ void Graph::AddEdgesToNodes()
 	}
 }
 
-//void Graph::Dijkstra(Node* start, Node* goal)
-//{
-//	for (auto node : NodeList)
-//	{
-//		node->previous = NULL;
-//		node->gScore = INFINITY;
-//	}
-//
-//	std::list<Node*> NodeStack;
-//	NodeStack.push_front(start);
-//
-//
-//	while (!NodeStack.empty())
-//	{
-//		NodeStack.sort(NodeCompare);
-//		Node* currentNode = NodeStack.front();
-//		if (currentNode == goal)
-//		{
-//			std::cout << "found the End!" << std::endl;
-//			//sort nodes
-//
-//			//for (int i = 0; i < NodeStack.size(); i++)
-//			//{
-//			//	NodeStack.pop();
-//			//}
-//			break;
-//		}
-//		currentNode = NodeStack.front();
-//		NodeStack.pop_front();
-//		currentNode->previous = currentNode;
-//		currentNode->gScore = 0;
-//		currentNode->isVisited = true;
-//
-//		for (auto Edge : currentNode->EdgeList)
-//		{
-//			Node* end = Edge.destNode;
-//			if (end->isVisited == false)
-//			{
-//				currentNode->gScore += Edge.getCost();
-//				if (Edge.cost <= currentNode->gScore)
-//				{
-//					end->previous = currentNode;
-//					end->gScore = currentNode->gScore + Edge.getCost();
-//					NodeStack.push_front(end);
-//		
-//				}
-//			}
-//		}
-//	}
-//	std::cout << goal << std::endl;
-//}
-
 void Graph::DeleteNodesEdges(Node* n)
 {
 	n->isWall = true;
 }
 
-//bool NodeCompare(Node* lhs, Node* rhs)
-//{
-//	return lhs->gScore < rhs->gScore;
-//}
 
 
-Node* Graph::FindNodeLine(float xCord, float yCord)
-{
-	for (auto node : NodeList)
-	{
-		Box b = AABB(node);
-		if (b.minPoint.x < xCord &&b.minPoint.y < yCord && b.maxPoint.x > xCord && b.maxPoint.y > yCord)
-		{
-			return node;
-		}
-	}
-}
-
-Box Graph::AABB(Node* n)
-{
-	glm::vec2 min(n->x - n->width, n->y - n->height);
-	glm::vec2 max(n->x + n->width, n->y + n->height);
-	return Box(min, max);
-}
