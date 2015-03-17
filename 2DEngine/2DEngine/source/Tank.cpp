@@ -1,6 +1,6 @@
 #include "Tank.h"
 
-void Tank::Dijkstra(Node* start, Node* goal, Graph grid)
+void Tank::Dijkstra(Node* start, Node* goal, Graph &grid)
 {
 	for (auto node : grid.NodeList)
 	{
@@ -94,11 +94,12 @@ void Tank::Dijkstra(Node* start, Node* goal, Graph grid)
 
 
 
-bool Tank::IsStraightLine(Node* begin, Node* end, Graph grid)
+bool Tank::IsStraightLine(Node* begin, Node* end, Graph &grid)
 {
 	glm::vec2 rDirection = RayDirection(glm::vec2(begin->x, begin->y), glm::vec2(end->x, end->y));
 	Ray ray(glm::vec2(begin->x, begin->y), rDirection);
-	std::vector<Node* > NodesInLine = GetNodesInLine(ray, end, grid);
+	std::vector<Node* > NodesInLine;
+	GetNodesInLine(NodesInLine, ray, end, grid);
 	for (auto Node : NodesInLine)
 	{
 		if (!Node->isWall)
@@ -119,9 +120,8 @@ glm::vec2 Tank::RayDirection(glm::vec2& startPos, glm::vec2& endPos)
 	return glm::normalize(endPos - startPos);
 }
 
-std::vector<Node*> Tank::GetNodesInLine(Ray ray, Node* end, Graph grid)
+void Tank::GetNodesInLine(std::vector<Node*> &v, Ray ray, Node* end, Graph &grid)
 {
-	std::vector<Node*> v;
 	glm::vec2 currentPos = ray.origin;
 	glm::vec2 size(end->width, end->height);
 	Node* currentNode = NULL;
@@ -135,7 +135,6 @@ std::vector<Node*> Tank::GetNodesInLine(Ray ray, Node* end, Graph grid)
 			v.push_back(currentNode);
 		}
 	}
-	return v;
 }
 
 bool Tank::AABBRayCollision(Ray ray, Box b)

@@ -17,6 +17,7 @@ struct Ray
 struct Box
 {
 	Box(glm::vec2 min, glm::vec2 max){ minPoint = min; maxPoint = max; };
+	~Box(){};
 	glm::vec2 minPoint;
 	glm::vec2 maxPoint;
 };

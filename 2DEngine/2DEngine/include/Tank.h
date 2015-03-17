@@ -8,11 +8,11 @@ class Tank
 public:
 	Tank(){};
 	~Tank(){};
-	void Dijkstra(Node* start, Node* goal, Graph grid);
+	void Dijkstra(Node* start, Node* goal, Graph &grid);
 	
-	bool IsStraightLine(Node* begin, Node* end, Graph grid);
+	bool IsStraightLine(Node* begin, Node* end, Graph &grid);
 	glm::vec2 RayDirection(glm::vec2& startPos, glm::vec2& endPos);
-	std::vector<Node*> GetNodesInLine(Ray ray, Node* end, Graph grid);
+	void GetNodesInLine(std::vector<Node*> &v, Ray ray, Node* end, Graph &grid);
 	bool AABBRayCollision(Ray ray, Box b);
 };
 
