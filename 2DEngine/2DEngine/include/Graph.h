@@ -1,58 +1,10 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 #include "framework.h"
+#include "Node.h"
 #include <algorithm>
 #include <stack>
 #include <list>
-
-//forward decleration
-class Node;
-
-struct Edge
-{
-	Edge(Node* firstNode, Node* secNode, float f_cost)
-	{
-		orgNode = firstNode;
-		destNode = secNode;
-		cost = f_cost;
-	};
-	~Edge(){};
-	Node* getOrgNode(){ return orgNode; };
-	Node* getDestNode(){ return destNode; };
-	float getCost(){ return cost; };
-	float cost;
-	Node* destNode;
-private:
-	Node* orgNode;
-
-
-};
-
-class Node
-{
-public:
-	
-	Node(int a_width, int a_height, int a_colPos, int a_rowPos)
-	{ 
-		rowPos = a_rowPos; colPos = a_colPos;  
-		width = a_width; height = a_height; 
-		isVisited = false, isWall = false; 
-	};
-	~Node(){};
-	int ReturnCoord(){ return x, y; };
-	bool CheckIfVisited(){ return isVisited; };
-	void SetVisited(){ isVisited = true; };
-	void SetNotVisited(){ isVisited = false; };
-	void AddAdjacentNode(Node* adj, float f_cost);
-	unsigned int spriteID;
-	int gScore;
-	Node* previous;
-	int width, height, x, y, rowPos, colPos;
-	std::vector<Edge>EdgeList;
-	bool isVisited, isWall;
-private:
-
-};
 
 struct Ray
 {
