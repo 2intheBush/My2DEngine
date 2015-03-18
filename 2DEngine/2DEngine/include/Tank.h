@@ -1,24 +1,17 @@
 #ifndef _TANK_H_
 #define _TANK_H_
-
-#include "Graph.h"
+#include "glm\glm.hpp"
 
 class Tank
 {
 public:
 	Tank(){};
 	~Tank(){};
-	void Dijkstra(Node* start, Node* goal, Graph &grid);
-	
-	bool IsStraightLine(Node* begin, Node* end, Graph &grid);
-	glm::vec2 RayDirection(glm::vec2& startPos, glm::vec2& endPos);
-	void GetNodesInLine(std::vector<Node*> &v, Ray ray, Node* end, Graph &grid);
-	bool AABBRayCollision(Ray& ray, Box b);
+	glm::vec2 position;
+	glm::vec2 size;
+	glm::mat3 transform;
+	float speed;
+	virtual void Update() = 0;
 };
 
 #endif
-
-static bool HeuristicCompare(Node* lhs, Node* rhs)
-{
-	return lhs->gScore + lhs->hDistance < rhs->gScore + lhs->hDistance;
-}

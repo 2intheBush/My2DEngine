@@ -1,8 +1,13 @@
-#include "Tank.h"
+#include "Path.h"
+#include "SteeringBehavior.h"
+
 GLF TwoDEngine;
 
 Graph grid;
-Tank tank;
+Path path;
+AITank seekTank;
+AITank FleeTank;
+Seek* seek;
 
 float keyPressTimer = .25f;
 float keyPressCounter = 0;
@@ -11,6 +16,23 @@ void InitSprites();
 void SetSprites();
 bool NodeCompare(Node* lhs, Node* rhs);
 
+void InitTank()
+{
+	seekTank.steerBehave->owner = &seekTank;
+	seekTank.steerBehave = seek;
+	seekTank.maxVelocity = 10;
+
+	FleeTank.steerBehave->owner = &FleeTank;
+	//FleeTank.steerBehave
+	FleeTank.maxVelocity = 10.0f;
+}
+
+void Destroy()
+{
+	delete seek;
+
+}
+
 float a_x, a_y;
 unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite;
 double cursX, cursY;
@@ -18,13 +40,18 @@ int main()
 {
 	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 	
+	seek = new Seek;
+
+
 	a_x = a_y = 0;
-	grid.CreateGrid(144, 25, 25);
+	grid.CreateGrid(196, 25, 25);
 	grid.AddEdgesToNodes();
 	InitSprites();
 
+
+
 	grid.startNode = grid.NodeList[0];
-	grid.goalNode = grid.NodeList[140];
+	grid.goalNode = grid.NodeList[180];
 	
 	grid.startNode->spriteID = currentSprite;
 	grid.goalNode->spriteID = goalSprite;
@@ -38,7 +65,7 @@ int main()
 		TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
 		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
 		keyPressCounter += TwoDEngine.deltaTime;
-		
+
 		if (TwoDEngine.command.IsKeyPressed(s))
 		{
 			int x = (cursX / 50);
@@ -50,7 +77,7 @@ int main()
 
 		if (TwoDEngine.command.IsKeyPressed(spacebar))
 		{
- 			tank.Dijkstra(grid.startNode, grid.goalNode, grid);
+			path.Dijkstra(grid.startNode, grid.goalNode, grid);
 			SetSprites();
 		}
 
@@ -59,11 +86,13 @@ int main()
 			TwoDEngine.MoveSprite(node->spriteID, node->x, node->y);
 			TwoDEngine.DrawSprites(node->spriteID);
 		}
- 
+
+		//seekTank->Update();
+
 		TwoDEngine.SwapBuffers();
 
 	}
-	grid.~Graph();
+	Destroy();
 	TwoDEngine.Shutdown();
 }
 

@@ -39,7 +39,16 @@
     <ClCompile Include="source\Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="source\Tank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AITank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SteeringBehavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +77,16 @@
     <ClInclude Include="include\Edge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Tank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AITank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SteeringBehavior.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

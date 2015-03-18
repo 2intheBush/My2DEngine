@@ -70,6 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\AITank.cpp" />
     <ClCompile Include="source\animation.cpp" />
     <ClCompile Include="source\command.cpp" />
     <ClCompile Include="source\font.cpp" />
@@ -77,10 +78,13 @@
     <ClCompile Include="source\Graph.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\sprite.cpp" />
+    <ClCompile Include="source\Path.cpp" />
+    <ClCompile Include="source\SteeringBehavior.cpp" />
     <ClCompile Include="source\Tank.cpp" />
     <ClCompile Include="source\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\AITank.h" />
     <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\command.h" />
     <ClInclude Include="include\Edge.h" />
@@ -89,6 +93,8 @@
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\Node.h" />
     <ClInclude Include="include\sprite.h" />
+    <ClInclude Include="include\Path.h" />
+    <ClInclude Include="include\SteeringBehavior.h" />
     <ClInclude Include="include\Tank.h" />
   </ItemGroup>
   <ItemGroup>
