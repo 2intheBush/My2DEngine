@@ -8,7 +8,7 @@ Path path;
 AITank seekTank;
 AITank FleeTank;
 Seek* seek;
-
+Flee* flee;
 float keyPressTimer = .25f;
 float keyPressCounter = 0;
 
@@ -16,32 +16,39 @@ void InitSprites();
 void SetSprites();
 bool NodeCompare(Node* lhs, Node* rhs);
 
-void InitTank()
-{
-	seekTank.steerBehave->owner = &seekTank;
-	seekTank.steerBehave = seek;
-	seekTank.maxVelocity = 10;
-
-	FleeTank.steerBehave->owner = &FleeTank;
-	//FleeTank.steerBehave
-	FleeTank.maxVelocity = 10.0f;
-}
-
 void Destroy()
 {
 	delete seek;
-
+	delete flee;
 }
 
 float a_x, a_y;
-unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite;
+unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite, seekTankID;
 double cursX, cursY;
+
+void InitTank()
+{
+	seekTank.steerBehave = seek;
+	seekTank.steerBehave->owner = &seekTank;
+	seekTank.spriteID = seekTankID;
+	seek->Target = &FleeTank;
+	seekTank.maxVelocity = 10;
+	seekTank.position = glm::vec2(600, 350);
+
+	FleeTank.steerBehave = flee;
+	FleeTank.steerBehave->owner = &FleeTank;
+	FleeTank.maxVelocity = 10.0f;
+	FleeTank.position = glm::vec2(60, 35);
+}
+
 int main() 
 {
 	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 	
 	seek = new Seek;
+	flee = new Flee;
 
+	InitTank();
 
 	a_x = a_y = 0;
 	grid.CreateGrid(196, 25, 25);
@@ -87,6 +94,9 @@ int main()
 			TwoDEngine.DrawSprites(node->spriteID);
 		}
 
+		TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position[0], seekTank.position[1]);
+		TwoDEngine.DrawSprites(seekTank.spriteID);
+
 		//seekTank->Update();
 
 		TwoDEngine.SwapBuffers();
@@ -107,6 +117,8 @@ void InitSprites()
 	currentSprite = TwoDEngine.CreateSprite("resources\\images\\currentbox.png", 25, 25);
 
 	goalSprite = TwoDEngine.CreateSprite("resources\\images\\goalbox.png", 25, 25);
+
+	seekTankID = TwoDEngine.CreateSprite("resources\\images\\seekTank.png", 25, 25);
 
 }
 

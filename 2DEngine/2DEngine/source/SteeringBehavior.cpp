@@ -11,3 +11,8 @@ glm::vec2 Seek::GetForce()
 	force *= owner->maxVelocity;
 	return force - owner->velocity;
 }
+
+glm::vec2 Flee::GetForce()
+{
+	return glm::vec2(0,0);
+}

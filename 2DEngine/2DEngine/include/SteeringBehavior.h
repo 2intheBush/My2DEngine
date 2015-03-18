@@ -27,4 +27,13 @@ public:
 	glm::vec2 GetForce();
 	AITank* Target;
 };
+
+class Flee : public SteeringBehavior
+{
+public:
+	Flee(){};
+	~Flee(){};
+	glm::vec2 GetForce();
+	AITank* Target;
+};
 #endif

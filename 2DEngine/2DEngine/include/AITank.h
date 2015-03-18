@@ -11,7 +11,7 @@ public:
 	SteeringBehavior* steerBehave;
 	glm::vec2 velocity;
 	float maxVelocity;
-
+	unsigned int spriteID;
 	void Update();
 };
 
