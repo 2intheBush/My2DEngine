@@ -19,11 +19,11 @@ int main()
 	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 	
 	a_x = a_y = 0;
-	grid.CreateGrid(144, 100, 100);
+	grid.CreateGrid(144, 25, 25);
 	grid.AddEdgesToNodes();
 	InitSprites();
 
-	grid.startNode = grid.NodeList[13];
+	grid.startNode = grid.NodeList[0];
 	grid.goalNode = grid.NodeList[140];
 	
 	grid.startNode->spriteID = currentSprite;
@@ -41,8 +41,8 @@ int main()
 		
 		if (TwoDEngine.command.IsKeyPressed(s))
 		{
-			int x = ((cursX - 75) / 50);
-			int y = ((cursY - 75) / 50);
+			int x = (cursX / 50);
+			int y = (cursY / 50);
 			Node* n = grid.GetNode(y, x);
 			grid.DeleteNodesEdges(n);
 			n->spriteID = wallSprite;

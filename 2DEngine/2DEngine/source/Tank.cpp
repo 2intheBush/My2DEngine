@@ -102,7 +102,7 @@ bool Tank::IsStraightLine(Node* begin, Node* end, Graph &grid)
 	GetNodesInLine(NodesInLine, ray, end, grid);
 	for (auto Node : NodesInLine)
 	{
-		if (!Node->isWall)
+		if (Node->isWall)
 		{
 			//check collision
 			Box box = grid.AABB(Node);
@@ -137,15 +137,26 @@ void Tank::GetNodesInLine(std::vector<Node*> &v, Ray ray, Node* end, Graph &grid
 	}
 }
 
-bool Tank::AABBRayCollision(Ray ray, Box b)
+bool Tank::AABBRayCollision(Ray& ray, Box b)
 {
-	glm::vec2 min = (b.minPoint - ray.origin) / ray.direction;
-	glm::vec2 max = (b.maxPoint - ray.origin) / ray.direction;
+	float tmin = INT_MIN, tmax = INT_MAX;
+	if (ray.direction.x != 0.0f)
+	{
+		float tx1 = (b.minPoint.x - ray.origin.x) * (1 / ray.direction.x);
+		float tx2 = (b.maxPoint.x - ray.origin.x) * (1 / ray.direction.x);
 
-	glm::vec2 near = glm::min(min, max);
-	glm::vec2 far = glm::max(min, max);
+		tmin = std::max(tmin, std::min(tx1, tx2));
+		tmax = std::min(tmax, std::max(tx1, tx2));
+	}
 
-	float enter = glm::max(glm::max(near.x, near.y), 0.0f);
-	float exit = glm::min(far.x, far.y);
-	return (exit > 0.0f && enter < exit);
+	if (ray.direction.y != 0.0f)
+	{
+		float ty1 = (b.minPoint.y - ray.origin.y) * (1 / ray.direction.y);
+		float ty2 = (b.maxPoint.y - ray.origin.y) * (1 / ray.direction.y);
+
+		tmin = std::max(tmin, std::min(ty1, ty2));
+		tmax = std::min(tmax, std::max(ty1, ty2));
+
+	}
+	return tmax >= tmin;
 }

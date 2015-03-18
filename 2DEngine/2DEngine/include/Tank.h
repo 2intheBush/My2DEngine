@@ -13,7 +13,7 @@ public:
 	bool IsStraightLine(Node* begin, Node* end, Graph &grid);
 	glm::vec2 RayDirection(glm::vec2& startPos, glm::vec2& endPos);
 	void GetNodesInLine(std::vector<Node*> &v, Ray ray, Node* end, Graph &grid);
-	bool AABBRayCollision(Ray ray, Box b);
+	bool AABBRayCollision(Ray& ray, Box b);
 };
 
 #endif
