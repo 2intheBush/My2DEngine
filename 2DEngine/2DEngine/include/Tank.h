@@ -12,6 +12,7 @@ public:
 	glm::mat3 transform;
 	float speed;
 	virtual void Update() = 0;
+	virtual void CheckWallCollision() = 0;
 };
 
 #endif

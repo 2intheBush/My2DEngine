@@ -106,5 +106,11 @@
     <Image Include="resources\images\wallbox.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\images\seekTank.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\images\fleeTank.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

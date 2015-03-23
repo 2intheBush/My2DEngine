@@ -13,6 +13,7 @@ public:
 	float maxVelocity;
 	unsigned int spriteID;
 	void Update();
+	void CheckWallCollision();
 };
 
 #endif

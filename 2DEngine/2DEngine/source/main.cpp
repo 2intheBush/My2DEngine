@@ -6,7 +6,7 @@ GLF TwoDEngine;
 Graph grid;
 Path path;
 AITank seekTank;
-AITank FleeTank;
+AITank fleeTank;
 Seek* seek;
 Flee* flee;
 float keyPressTimer = .25f;
@@ -23,22 +23,24 @@ void Destroy()
 }
 
 float a_x, a_y;
-unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite, seekTankID;
+unsigned int trueSprite, falseSprite, currentSprite, goalSprite, wallSprite, seekTankID, fleeTankID;
 double cursX, cursY;
 
 void InitTank()
 {
 	seekTank.steerBehave = seek;
 	seekTank.steerBehave->owner = &seekTank;
-	seekTank.spriteID = seekTankID;
-	seek->Target = &FleeTank;
-	seekTank.maxVelocity = 10;
-	seekTank.position = glm::vec2(600, 350);
+	seekTank.spriteID = seekTankID = 5;
+	seek->Target = &fleeTank;
+	seekTank.maxVelocity = 5.f;
+	seekTank.position = glm::vec2(750, 350);
 
-	FleeTank.steerBehave = flee;
-	FleeTank.steerBehave->owner = &FleeTank;
-	FleeTank.maxVelocity = 10.0f;
-	FleeTank.position = glm::vec2(60, 35);
+	fleeTank.steerBehave = flee;
+	fleeTank.steerBehave->owner = &fleeTank;
+	fleeTank.spriteID = fleeTankID = 6;
+	fleeTank.maxVelocity = 1.0f;
+	fleeTank.velocity = glm::vec2(5, 5);
+	fleeTank.position = glm::vec2(60, 35);
 }
 
 int main() 
@@ -94,8 +96,14 @@ int main()
 			TwoDEngine.DrawSprites(node->spriteID);
 		}
 
+		seekTank.Update();
+		fleeTank.Update();
+
 		TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position[0], seekTank.position[1]);
 		TwoDEngine.DrawSprites(seekTank.spriteID);
+
+		TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position[0], fleeTank.position[1]);
+		TwoDEngine.DrawSprites(fleeTank.spriteID);
 
 		//seekTank->Update();
 
@@ -119,6 +127,8 @@ void InitSprites()
 	goalSprite = TwoDEngine.CreateSprite("resources\\images\\goalbox.png", 25, 25);
 
 	seekTankID = TwoDEngine.CreateSprite("resources\\images\\seekTank.png", 25, 25);
+
+	fleeTankID = TwoDEngine.CreateSprite("resources\\images\\fleeTank.png", 25, 25);
 
 }
 

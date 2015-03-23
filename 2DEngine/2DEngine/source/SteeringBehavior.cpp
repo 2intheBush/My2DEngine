@@ -14,5 +14,5 @@ glm::vec2 Seek::GetForce()
 
 glm::vec2 Flee::GetForce()
 {
-	return glm::vec2(0,0);
+	return glm::vec2(owner->velocity);
 }
