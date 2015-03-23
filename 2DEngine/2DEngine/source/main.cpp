@@ -9,6 +9,7 @@ AITank seekTank;
 AITank fleeTank;
 Seek* seek;
 Flee* flee;
+
 float keyPressTimer = .25f;
 float keyPressCounter = 0;
 
@@ -45,73 +46,80 @@ void InitTank()
 
 int main() 
 {
-	TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
-	
-	seek = new Seek;
-	flee = new Flee;
-
-	InitTank();
-
-	a_x = a_y = 0;
-	grid.CreateGrid(196, 25, 25);
-	grid.AddEdgesToNodes();
-	InitSprites();
-
-
-
-	grid.startNode = grid.NodeList[0];
-	grid.goalNode = grid.NodeList[180];
-	
-	grid.startNode->spriteID = currentSprite;
-	grid.goalNode->spriteID = goalSprite;
-
-	while (TwoDEngine.UpdateFramework())
+	try
 	{
-		TwoDEngine.SetScreenColor(0.1f, 0.4f, 0.7f, 0.0f);
-		TwoDEngine.GetCursPos(cursX, cursY);
-		cursY = 720 - cursY;
-		TwoDEngine.currentFrame = glfwGetTime();
-		TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
-		TwoDEngine.lastFrame = TwoDEngine.currentFrame;
-		keyPressCounter += TwoDEngine.deltaTime;
 
-		if (TwoDEngine.command.IsKeyPressed(s))
+		TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
+
+		seek = new Seek;
+		flee = new Flee;
+
+		InitTank();
+
+		a_x = a_y = 0;
+		grid.CreateGrid(196, 25, 25);
+		grid.AddEdgesToNodes();
+		InitSprites();
+
+		grid.startNode = grid.NodeList[0];
+		grid.goalNode = grid.NodeList[180];
+
+		grid.startNode->spriteID = currentSprite;
+		grid.goalNode->spriteID = goalSprite;
+
+		while (TwoDEngine.UpdateFramework())
 		{
-			int x = (cursX / 50);
-			int y = (cursY / 50);
-			Node* n = grid.GetNode(y, x);
-			grid.DeleteNodesEdges(n);
-			n->spriteID = wallSprite;
+			TwoDEngine.SetScreenColor(0.1f, 0.4f, 0.7f, 0.0f);
+			TwoDEngine.GetCursPos(cursX, cursY);
+			cursY = 720 - cursY;
+			TwoDEngine.currentFrame = glfwGetTime();
+			TwoDEngine.deltaTime = TwoDEngine.currentFrame - TwoDEngine.lastFrame;
+			TwoDEngine.lastFrame = TwoDEngine.currentFrame;
+			keyPressCounter += TwoDEngine.deltaTime;
+
+			if (TwoDEngine.command.IsKeyPressed(s))
+			{
+				int x = (cursX / 50);
+				int y = (cursY / 50);
+				Node* n = grid.GetNode(y, x);
+				grid.DeleteNodesEdges(n);
+				n->spriteID = wallSprite;
+			}
+
+			if (TwoDEngine.command.IsKeyPressed(spacebar))
+			{
+				path.Dijkstra(grid.startNode, grid.goalNode, grid);
+				SetSprites();
+			}
+
+			for (auto node : grid.NodeList)
+			{
+				TwoDEngine.MoveSprite(node->spriteID, node->x, node->y);
+				TwoDEngine.DrawSprites(node->spriteID);
+			}
+
+			seekTank.Update();
+			fleeTank.Update();
+
+			TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position[0], seekTank.position[1]);
+			TwoDEngine.DrawSprites(seekTank.spriteID);
+
+			TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position[0], fleeTank.position[1]);
+			TwoDEngine.DrawSprites(fleeTank.spriteID);
+
+			//seekTank->Update();
+
+			TwoDEngine.SwapBuffers();
+
 		}
-
-		if (TwoDEngine.command.IsKeyPressed(spacebar))
-		{
-			path.Dijkstra(grid.startNode, grid.goalNode, grid);
-			SetSprites();
-		}
-
-		for (auto node : grid.NodeList)
-		{
-			TwoDEngine.MoveSprite(node->spriteID, node->x, node->y);
-			TwoDEngine.DrawSprites(node->spriteID);
-		}
-
-		seekTank.Update();
-		fleeTank.Update();
-
-		TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position[0], seekTank.position[1]);
-		TwoDEngine.DrawSprites(seekTank.spriteID);
-
-		TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position[0], fleeTank.position[1]);
-		TwoDEngine.DrawSprites(fleeTank.spriteID);
-
-		//seekTank->Update();
-
-		TwoDEngine.SwapBuffers();
-
+		Destroy();
+		TwoDEngine.Shutdown();
 	}
-	Destroy();
-	TwoDEngine.Shutdown();
+	catch(int e)
+	{
+		std::cout << "exception occured" << std::endl;
+	}
+	return 0;
 }
 
 void InitSprites()
