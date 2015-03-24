@@ -38,9 +38,10 @@ void InitTank()
 
 	fleeTank.steerBehave = flee;
 	fleeTank.steerBehave->owner = &fleeTank;
+	flee->Target = &seekTank;
 	fleeTank.spriteID = fleeTankID = 6;
 	fleeTank.maxVelocity = 1.0f;
-	fleeTank.velocity = glm::vec2(5, 5);
+	fleeTank.velocity = glm::vec2(4, 5);
 	fleeTank.position = glm::vec2(60, 35);
 }
 
@@ -48,7 +49,6 @@ int main()
 {
 	try
 	{
-
 		TwoDEngine.InitWindow(1024, 720, "Hell YA!!");
 
 		seek = new Seek;

@@ -15,7 +15,6 @@ public:
 	~SteeringBehavior(){};
 	virtual glm::vec2 GetForce() = 0;
 	AITank* owner;
-
 };
 
 
@@ -33,6 +32,15 @@ class Flee : public SteeringBehavior
 public:
 	Flee(){};
 	~Flee(){};
+	glm::vec2 GetForce();
+	AITank* Target;
+};
+
+class Wander : public SteeringBehavior
+{
+public:
+	Wander(){};
+	~Wander(){};
 	glm::vec2 GetForce();
 	AITank* Target;
 };

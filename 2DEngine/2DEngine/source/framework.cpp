@@ -1,7 +1,5 @@
 #include "framework.h"
 
-
-
 int GLF::InitWindow(int screenWidth, int screenHeight, const char* title)
 {
 	if (!glfwInit())
@@ -39,21 +37,10 @@ int GLF::InitWindow(int screenWidth, int screenHeight, const char* title)
 	glAlphaFunc(GL_GREATER, 0);
 	return 0;
 }
-const float* GLF::getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar)
+glm::mat4 GLF::getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar)
 {
 	//to correspond with mat4 in the shader
-	float * toReturn = new float[12];
-	toReturn[0] = 2.0 / (right - left);
-	toReturn[1] = toReturn[2] = toReturn[3] = toReturn[4] = 0;
-	toReturn[5] = 2.0 / (top - bottom);
-	toReturn[6] = toReturn[7] = toReturn[8] = toReturn[9] = 0;
-	toReturn[10] = 2.0 / (a_fFar - a_fNear);
-	toReturn[11] = 0;
-	toReturn[12] = -1 * ((right + left) / (right - left));
-	toReturn[13] = -1 * ((top + bottom) / (top - bottom));
-	toReturn[14] = -1 * ((a_fFar + a_fNear) / (a_fFar - a_fNear));
-	toReturn[15] = 1;
-	return toReturn;
+	return glm::ortho(left, right, bottom, top, a_fNear, a_fFar);
 }
 GLuint GLF::CreateShader(GLenum a_eShaderType, const char *a_strShaderFile)
 {
@@ -66,13 +53,17 @@ GLuint GLF::CreateShader(GLenum a_eShaderType, const char *a_strShaderFile)
 		std::string Line = "";
 		while (std::getline(shaderStream, Line))
 		{
-			strShaderCode += "\n" + Line;
+			strShaderCode += Line + "\n";
 		}
 		shaderStream.close();
+		strShaderCode += '\0';
 	}
 
 	//convert to cstring
-	char const *szShaderSourcePointer = strShaderCode.c_str();
+	const char *szShaderSourcePointer = strShaderCode.c_str();
+	//strcpy(szShaderSourcePointer,strShaderCode.c_str())
+	//char const *szShaderSourcePointer;
+	//szShaderSourcePointer = strShaderCode.c_str();
 
 	//create shader ID
 	GLuint uiShader = glCreateShader(a_eShaderType);

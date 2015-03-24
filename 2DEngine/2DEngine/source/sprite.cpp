@@ -50,7 +50,6 @@ Sprite::Sprite(const char* a_fileName, int width, int height)
 	//create VBO and IBO for object
 	glGenBuffers(1, &uiVBO);
 	glGenBuffers(1, &uiIBO);
-
 }
 
 void Sprite::UpdateUV(glm::vec2 vOne, glm::vec2 vTwo, glm::vec2 vThree, glm::vec2 vFour)
