@@ -14,14 +14,8 @@ public:
 	std::vector<Sprite> mSpriteList;
 	animate Animation;
 	glm::mat4 m_MVP;
-	const float* ortho;
 	GLFWwindow* window;
 	int InitWindow(int screenWidth, int screenHeight, const char* title);
-	GLuint uiProgramTextured;
-	GLuint MatrixIDTextured;
-	GLuint CreateProgram(const char *a_vertex, const char *a_frag);
-	GLuint CreateShader(GLenum a_eShaderType, const char *a_strShaderFile);
-	glm::mat4 getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar);
 	void SetScreenColor(float a_red, float a_green, float a_blue, float a_alpha);
 	void Shutdown();
 	bool UpdateFramework();
@@ -35,7 +29,7 @@ public:
 
 	unsigned int CreateSprite(const char* a_fileName, int width, int height);
 	void DrawSprites(unsigned int s);
-	void MoveSprite(unsigned int s, float x, float y);
-	void UpdateVertex(unsigned int s);
+	void MoveSprite(unsigned int s, glm::vec2 x_y);
+	void UpdateVertex(unsigned int s, glm::vec2 x_y);
 };
 #endif

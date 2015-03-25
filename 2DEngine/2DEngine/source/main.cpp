@@ -94,17 +94,17 @@ int main()
 
 			for (auto node : grid.NodeList)
 			{
-				TwoDEngine.MoveSprite(node->spriteID, node->x, node->y);
+				TwoDEngine.MoveSprite(node->spriteID, glm::vec2( node->x, node->y));
 				TwoDEngine.DrawSprites(node->spriteID);
 			}
 
 			seekTank.Update();
 			fleeTank.Update();
 
-			TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position[0], seekTank.position[1]);
+			TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position);
 			TwoDEngine.DrawSprites(seekTank.spriteID);
 
-			TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position[0], fleeTank.position[1]);
+			TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position);
 			TwoDEngine.DrawSprites(fleeTank.spriteID);
 
 			//seekTank->Update();

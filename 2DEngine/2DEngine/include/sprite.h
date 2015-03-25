@@ -18,7 +18,7 @@
 
 struct Vertex
 {
-	glm::vec4 position;
+	glm::vec2 position;
 	glm::vec4 color;
 	glm::vec2 UV;
 };
@@ -29,14 +29,23 @@ public:
 	Sprite(){};
 	~Sprite(){};
 
-	
+	GLuint uiVAO;
 	GLuint uiVBO;
 	GLuint uiIBO;
+	GLuint uiProgramTextured;
+	glm::mat4 ortho;
+	glm::mat4 MVPMatrix, viewMatrix;
+	glm::mat4 transform;
+	glm::vec3 translate, scale;
 	Vertex vertex[4];
 	int bpp;
 	float x, y, sWidth, sHeight;
-	const float* ortho;
-
+	glm::mat4 getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar);
+	GLuint MatrixIDTextured;
+	GLuint CreateProgram(const char *a_vertex, const char *a_frag);
+	GLuint CreateShader(GLenum a_eShaderType, const char *a_strShaderFile);
+	void UpdateMatrix();
+	void Translation(glm::vec2 x_y);
 
 	unsigned int spriteID;
 	unsigned int loadTexture(const char* o_fileName, int & a_iWidth, int & a_iHeight, int & a_iBPP);

@@ -23,119 +23,13 @@ int GLF::InitWindow(int screenWidth, int screenHeight, const char* title)
 		glfwTerminate();
 		return -1;
 	};
-	ortho = getOrtho(0, screenWidth, 0, screenHeight, 0, 100);
-	uiProgramTextured = CreateProgram("VertexShader.glsl", "TexturedFragmentShader.glsl");
-	MatrixIDTextured = glGetUniformLocation(uiProgramTextured, "MVP");
-
-	//class shader program
-	glUseProgram(uiProgramTextured);
-	//ortho project onto shader
-	glUniformMatrix4fv(MatrixIDTextured, 1, GL_FALSE, ortho);
 
 	//alpha blend
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0);
 	return 0;
 }
-glm::mat4 GLF::getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar)
-{
-	//to correspond with mat4 in the shader
-	return glm::ortho(left, right, bottom, top, a_fNear, a_fFar);
-}
-GLuint GLF::CreateShader(GLenum a_eShaderType, const char *a_strShaderFile)
-{
-	std::string strShaderCode;
-	//open shader file
-	std::ifstream shaderStream(a_strShaderFile);
-	//if that worked ok, load file line by line
-	if (shaderStream.is_open())
-	{
-		std::string Line = "";
-		while (std::getline(shaderStream, Line))
-		{
-			strShaderCode += Line + "\n";
-		}
-		shaderStream.close();
-		strShaderCode += '\0';
-	}
 
-	//convert to cstring
-	const char *szShaderSourcePointer = strShaderCode.c_str();
-	//strcpy(szShaderSourcePointer,strShaderCode.c_str())
-	//char const *szShaderSourcePointer;
-	//szShaderSourcePointer = strShaderCode.c_str();
-
-	//create shader ID
-	GLuint uiShader = glCreateShader(a_eShaderType);
-	//load source code
-	glShaderSource(uiShader, 1, &szShaderSourcePointer, NULL);
-
-	//compile shader
-	glCompileShader(uiShader);
-
-	//check for compilation errors and output them
-	GLint iStatus;
-	glGetShaderiv(uiShader, GL_COMPILE_STATUS, &iStatus);
-	if (iStatus == GL_FALSE)
-	{
-		GLint infoLogLength;
-		glGetShaderiv(uiShader, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-		glGetShaderInfoLog(uiShader, infoLogLength, NULL, strInfoLog);
-
-		const char *strShaderType = NULL;
-		switch (a_eShaderType)
-		{
-		case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
-		case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
-		}
-
-		fprintf(stderr, "Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
-		delete[] strInfoLog;
-	}
-
-	return uiShader;
-}
-GLuint GLF::CreateProgram(const char *a_vertex, const char *a_frag)
-{
-	std::vector<GLuint> shaderList;
-
-	shaderList.push_back(CreateShader(GL_VERTEX_SHADER, a_vertex));
-	shaderList.push_back(CreateShader(GL_FRAGMENT_SHADER, a_frag));
-
-	//create shader program ID
-	GLuint uiProgram = glCreateProgram();
-
-	//attach shaders
-	for (auto shader = shaderList.begin(); shader != shaderList.end(); shader++)
-		glAttachShader(uiProgram, *shader);
-
-	//link program
-	glLinkProgram(uiProgram);
-
-	//check for link errors and output them
-	GLint status;
-	glGetProgramiv(uiProgram, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		GLint infoLogLength;
-		glGetProgramiv(uiProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-		glGetProgramInfoLog(uiProgram, infoLogLength, NULL, strInfoLog);
-		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
-		delete[] strInfoLog;
-	}
-
-	for (auto shader = shaderList.begin(); shader != shaderList.end(); shader++)
-	{
-		glDetachShader(uiProgram, *shader);
-		glDeleteShader(*shader);
-	}
-
-	return uiProgram;
-}
 void GLF::Shutdown()
 {
 	glfwTerminate();
@@ -174,19 +68,20 @@ void GLF::DrawSprites(unsigned int s)
 	mSpriteList[s].Draw();
 }
 
-void GLF::MoveSprite(unsigned int s, float x, float y)
+void GLF::MoveSprite(unsigned int s, glm::vec2 x_y)
 {
-	mSpriteList[s].x = x;
-	mSpriteList[s].y = y;
-	UpdateVertex(s);
+	mSpriteList[s].x = x_y[0];
+	mSpriteList[s].y = x_y[1];
+	UpdateVertex(s, x_y);
  }
 
-void GLF::UpdateVertex(unsigned int s)
+void GLF::UpdateVertex(unsigned int s, glm::vec2 x_y)
 {
-	mSpriteList[s].vertex[0].position = glm::vec4(mSpriteList[s].x - mSpriteList[s].sWidth, mSpriteList[s].y - mSpriteList[s].sHeight, 0, 1);
-	mSpriteList[s].vertex[1].position = glm::vec4(mSpriteList[s].x - mSpriteList[s].sWidth, mSpriteList[s].y + mSpriteList[s].sHeight, 0, 1);
-	mSpriteList[s].vertex[2].position = glm::vec4(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y + mSpriteList[s].sHeight, 0, 1);
-	mSpriteList[s].vertex[3].position = glm::vec4(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y - mSpriteList[s].sHeight, 0, 1);
+	//mSpriteList[s].vertex[0].position = glm::vec2(mSpriteList[s].x - mSpriteList[s].sWidth, mSpriteList[s].y - mSpriteList[s].sHeight);
+	//mSpriteList[s].vertex[1].position = glm::vec2(mSpriteList[s].x - mSpriteList[s].sWidth, mSpriteList[s].y + mSpriteList[s].sHeight);
+	//mSpriteList[s].vertex[2].position = glm::vec2(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y + mSpriteList[s].sHeight);
+	//mSpriteList[s].vertex[3].position = glm::vec2(mSpriteList[s].x + mSpriteList[s].sWidth, mSpriteList[s].y - mSpriteList[s].sHeight);
+	mSpriteList[s].Translation(x_y);
 }
 
 void GLF::CreateAnimation(const char * a_fileName, AnimationType currentState, float width, float height)
