@@ -1,4 +1,4 @@
-#include "command.h"
+ #include "command.h"
 
 void Command::HandleInput(GLFWwindow* a_window)
 {

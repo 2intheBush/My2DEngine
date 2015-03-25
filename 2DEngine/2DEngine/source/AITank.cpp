@@ -3,7 +3,7 @@
 
 void AITank::Update()
 {
-	position += steerBehave->GetForce();
+	force = steerBehave->GetForce();
 	CheckWallCollision();
 }
 

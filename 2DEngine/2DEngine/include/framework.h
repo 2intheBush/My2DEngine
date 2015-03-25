@@ -21,13 +21,17 @@ public:
 	bool UpdateFramework();
 	void SwapBuffers();
 	void GetCursPos(double &xPos, double &yPos);
+	GLuint CreateProgram(const char *a_vertex, const char *a_frag);
+	GLuint CreateShader(GLenum a_eShaderType, const char *a_strShaderFile);
+	GLuint MatrixIDTextured;
+	GLuint frameProgram;
 
 	void CreateAnimation(const char * a_fileName, AnimationType currentState, float width, float height);
 	void LoadAnimationSprite(const char * a_fileName, AnimationType currentState);
 	void DrawAnimatedSprite(AnimationType currentState);
 
 
-	unsigned int CreateSprite(const char* a_fileName, int width, int height);
+	unsigned int CreateSprite(const char* a_fileName, int width, int height, GLuint frameProgram);
 	void DrawSprites(unsigned int s);
 	void MoveSprite(unsigned int s, glm::vec2 x_y);
 	void UpdateVertex(unsigned int s, glm::vec2 x_y);

@@ -28,10 +28,13 @@ unsigned int Sprite::loadTexture(const char* o_fileName, int & a_iWidth, int & a
 	}
 }
 
-Sprite::Sprite(const char* a_fileName, int width, int height)
+Sprite::Sprite(const char* a_fileName, int width, int height, GLuint frameProgram)
 {
+	uiProgramTextured = frameProgram;
+
 	//class shader program
 	glUseProgram(uiProgramTextured);
+
 
 	int imageWidth, imageHeight;
 	bpp = 4;
@@ -56,20 +59,22 @@ Sprite::Sprite(const char* a_fileName, int width, int height)
 	glGenVertexArrays(1, &uiVAO);
 	glBindVertexArray(uiVAO);
 
-	GLint positionAttrib = glGetAttribLocation(uiProgramTextured, "postion");
+	GLint positionAttrib = glGetAttribLocation(uiProgramTextured, "position");
 	glEnableVertexAttribArray(positionAttrib);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 	GLint colorAttrib = glGetAttribLocation(uiProgramTextured, "colour");
 	glEnableVertexAttribArray(colorAttrib);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float)* 4));
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float)* 8));
+	glVertexAttribPointer(colorAttrib, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec2)));
+	
+	GLint uvAttrib = glGetAttribLocation(uiProgramTextured, "vertexUV");
+	glEnableVertexAttribArray(uvAttrib);
+	
+	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec2)+sizeof(glm::vec4)));
 
 
 	ortho = getOrtho(0, 1024, 0, 720, 0, 100);
-	uiProgramTextured = CreateProgram("VertexShader.glsl", "TexturedFragmentShader.glsl");
-	MatrixIDTextured = glGetUniformLocation(uiProgramTextured, "MVP");
+
 
 	viewMatrix = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
 	transform = glm::mat4(1);
@@ -98,7 +103,7 @@ void Sprite::UpdateMatrix()
 
 	MVPMatrix = ortho * viewMatrix * transform;
 
-	glUniformMatrix4fv(MatrixIDTextured, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+	glUniformMatrix4fv(MatrixIDText, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -107,7 +112,7 @@ void Sprite::UpdateMatrix()
 
 void Sprite::Translation(glm::vec2 x_y)
 {
-	translate = glm::vec3(x_y, 0);
+	translate = glm::vec3(x_y, 1);
 	UpdateMatrix();
 }
 
@@ -117,101 +122,7 @@ glm::mat4 Sprite::getOrtho(float left, float right, float bottom, float top, flo
 	return glm::ortho(left, right, bottom, top, a_fNear, a_fFar);
 }
 
-GLuint Sprite::CreateShader(GLenum a_eShaderType, const char *a_strShaderFile)
-{
-	std::string strShaderCode;
-	//open shader file
-	std::ifstream shaderStream(a_strShaderFile);
-	//if that worked ok, load file line by line
-	if (shaderStream.is_open())
-	{
-		std::string Line = "";
-		while (std::getline(shaderStream, Line))
-		{
-			strShaderCode += Line + "\n";
-		}
-		shaderStream.close();
-		strShaderCode += '\0';
-	}
 
-	//convert to cstring
-	const char *szShaderSourcePointer = strShaderCode.c_str();
-	//strcpy(szShaderSourcePointer,strShaderCode.c_str())
-	//char const *szShaderSourcePointer;
-	//szShaderSourcePointer = strShaderCode.c_str();
-
-	//create shader ID
-	GLuint uiShader = glCreateShader(a_eShaderType);
-	//load source code
-	glShaderSource(uiShader, 1, &szShaderSourcePointer, NULL);
-
-	//compile shader
-	glCompileShader(uiShader);
-
-	//check for compilation errors and output them
-	GLint iStatus;
-	glGetShaderiv(uiShader, GL_COMPILE_STATUS, &iStatus);
-	if (iStatus == GL_FALSE)
-	{
-		GLint infoLogLength;
-		glGetShaderiv(uiShader, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-		glGetShaderInfoLog(uiShader, infoLogLength, NULL, strInfoLog);
-
-		const char *strShaderType = NULL;
-		switch (a_eShaderType)
-		{
-		case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
-		case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
-		}
-
-		fprintf(stderr, "Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
-		delete[] strInfoLog;
-	}
-
-	return uiShader;
-}
-
-GLuint Sprite::CreateProgram(const char *a_vertex, const char *a_frag)
-{
-	std::vector<GLuint> shaderList;
-
-	shaderList.push_back(CreateShader(GL_VERTEX_SHADER, a_vertex));
-	shaderList.push_back(CreateShader(GL_FRAGMENT_SHADER, a_frag));
-
-	//create shader program ID
-	GLuint uiProgram = glCreateProgram();
-
-	//attach shaders
-	for (auto shader = shaderList.begin(); shader != shaderList.end(); shader++)
-		glAttachShader(uiProgram, *shader);
-
-	//link program
-	glLinkProgram(uiProgram);
-
-	//check for link errors and output them
-	GLint status;
-	glGetProgramiv(uiProgram, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		GLint infoLogLength;
-		glGetProgramiv(uiProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-		glGetProgramInfoLog(uiProgram, infoLogLength, NULL, strInfoLog);
-		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
-		delete[] strInfoLog;
-	}
-
-	for (auto shader = shaderList.begin(); shader != shaderList.end(); shader++)
-	{
-		glDetachShader(uiProgram, *shader);
-		glDeleteShader(*shader);
-	}
-
-	return uiProgram;
-}
 
 void Sprite::UpdateUV(glm::vec2 vOne, glm::vec2 vTwo, glm::vec2 vThree, glm::vec2 vFour)
 {
@@ -236,21 +147,9 @@ void Sprite::Draw()
 
 	//ortho project onto shader
 	//ortho needs to be MVP matrix 
-	glUniformMatrix4fv(MatrixIDTextured, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+	glUniformMatrix4fv(MatrixIDText, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
-
-	//now we have UVs, we need to send that info to the graphics card
-	/*
-	this is where you tell the GPU how to extract each piece of data from the blob of data you are sending it,
-	each Vertex struct has data and you have to tell it how it's structured as a whole, not each piece.
-	the last param is where each piece of data starts in memory per vertex chunk.
-	for each vertex chunk the vertices start at beginning (0) and are size of 4 floats, then there is color info
-	this starts after the vertices, so it's 0 + the 4 floats and itself is size of 4 floats, then it's the
-	UV coords which will start after (0 + 4 + 4) = 8.
-	*/
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(std::vector<glm::vec2>), (void*)(sizeof(float)* 8));
-
-
+	
 	//draw to the screen
 	glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_BYTE, NULL);
 

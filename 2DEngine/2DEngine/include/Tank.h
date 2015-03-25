@@ -8,6 +8,7 @@ public:
 	Tank(){};
 	~Tank(){};
 	glm::vec2 position;
+	glm::vec2 force;
 	glm::vec2 size;
 	glm::mat3 transform;
 	float speed;

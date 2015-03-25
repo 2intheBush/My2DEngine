@@ -101,10 +101,10 @@ int main()
 			seekTank.Update();
 			fleeTank.Update();
 
-			TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.position);
+			TwoDEngine.MoveSprite(seekTank.spriteID, seekTank.force);
 			TwoDEngine.DrawSprites(seekTank.spriteID);
 
-			TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.position);
+			TwoDEngine.MoveSprite(fleeTank.spriteID, fleeTank.force);
 			TwoDEngine.DrawSprites(fleeTank.spriteID);
 
 			//seekTank->Update();
@@ -124,19 +124,19 @@ int main()
 
 void InitSprites()
 {
-	falseSprite = TwoDEngine.CreateSprite("resources\\images\\greenbox.png", 25, 25);
+	falseSprite = TwoDEngine.CreateSprite("resources\\images\\greenbox.png", 25, 25, TwoDEngine.frameProgram);
 
-	trueSprite = TwoDEngine.CreateSprite("resources\\images\\redbox.png", 25, 25);
+	trueSprite = TwoDEngine.CreateSprite("resources\\images\\redbox.png", 25, 25, TwoDEngine.frameProgram);
 
-	wallSprite = TwoDEngine.CreateSprite("resources\\images\\wallbox.png", 25, 25);
+	wallSprite = TwoDEngine.CreateSprite("resources\\images\\wallbox.png", 25, 25, TwoDEngine.frameProgram);
 
-	currentSprite = TwoDEngine.CreateSprite("resources\\images\\currentbox.png", 25, 25);
+	currentSprite = TwoDEngine.CreateSprite("resources\\images\\currentbox.png", 25, 25, TwoDEngine.frameProgram);
 
-	goalSprite = TwoDEngine.CreateSprite("resources\\images\\goalbox.png", 25, 25);
+	goalSprite = TwoDEngine.CreateSprite("resources\\images\\goalbox.png", 25, 25, TwoDEngine.frameProgram);
 
-	seekTankID = TwoDEngine.CreateSprite("resources\\images\\seekTank.png", 25, 25);
+	seekTankID = TwoDEngine.CreateSprite("resources\\images\\seekTank.png", 25, 25, TwoDEngine.frameProgram);
 
-	fleeTankID = TwoDEngine.CreateSprite("resources\\images\\fleeTank.png", 25, 25);
+	fleeTankID = TwoDEngine.CreateSprite("resources\\images\\fleeTank.png", 25, 25, TwoDEngine.frameProgram);
 
 }
 
