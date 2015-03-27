@@ -72,7 +72,8 @@ Sprite::Sprite(const char* a_fileName, int width, int height, GLuint frameProgra
 	
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec2)+sizeof(glm::vec4)));
 
-
+	MatrixIDText = glGetUniformLocation(uiProgramTextured, "MVP");
+	glEnableVertexAttribArray(MatrixIDText);
 	ortho = getOrtho(0, 1024, 0, 720, 0, 100);
 
 
@@ -101,9 +102,9 @@ void Sprite::UpdateMatrix()
 	rotateMatrix = glm::rotate(rotateMatrix, 0.0f, glm::vec3(0, 0, 1));
 	transform = translateMatrix * rotateMatrix * scaleMatrix;
 
-	MVPMatrix = ortho * viewMatrix * transform;
+  	MVPMatrix = ortho * viewMatrix * transform;
 
-	glUniformMatrix4fv(MatrixIDText, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+ 	glUniformMatrix4fv(MatrixIDText, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -151,7 +152,7 @@ void Sprite::Draw()
 
 	
 	//draw to the screen
-	glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_BYTE, NULL);
+	glDrawElements(GL_POINTS, 4, GL_UNSIGNED_BYTE, NULL);
 
 	//unbind buffers 
 	glBindVertexArray(0);

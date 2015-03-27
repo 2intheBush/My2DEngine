@@ -110,6 +110,9 @@
     <Image Include="resources\images\seekTank.png" />
     <Image Include="resources\images\wallbox.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="VertexShader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

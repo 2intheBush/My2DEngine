@@ -159,7 +159,7 @@ unsigned int GLF::CreateSprite(const char* a_fileName, int width, int height, GL
 {
 	Sprite s(a_fileName, width, height, frameProgram);
 	mSpriteList.emplace_back(s);
-	MatrixIDTextured = s.MatrixIDText;
+	//MatrixIDTextured = s.MatrixIDText;
 	return mSpriteList.size() - 1;
 }
 
