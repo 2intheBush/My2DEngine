@@ -23,6 +23,7 @@ public:
 	void GetCursPos(double &xPos, double &yPos);
 	GLuint CreateProgram(const char *a_vertex, const char *a_frag);
 	GLuint CreateShader(GLenum a_eShaderType, const char *a_strShaderFile);
+	GLuint vertexShader, fragShader;
 	GLuint MatrixIDTextured;
 	GLuint frameProgram;
 

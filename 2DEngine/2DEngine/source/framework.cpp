@@ -24,10 +24,67 @@ int GLF::InitWindow(int screenWidth, int screenHeight, const char* title)
 		return -1;
 	};
 
+	//vertexShader string
+	const char* vShader = 
+	"#version 330/n"
+
+		"in vec2 position;"
+		"in vec4 colour;"
+		"in vec2 vertexUV;"
+		"uniform mat4 MVP;"
+		"out vec4 vertColour;"
+		"out vec2 UV;"
+		"void main() {"
+		"	vertColour = colour;"
+		"	UV = vertexUV;"
+		"	gl_Position = MVP * vec4(position, 0, 1);"
+		"}";
+
+	const char* fShader =
+	"#version 330/n"
+		"in vec4 vertColour;"
+		"in vec2 UV;"
+		"out vec4 outputColour;"
+		"uniform sampler2D myTextureSampler;"
+		"void main() {"
+		"	outputColour = texture(myTextureSampler, UV).rgba * vertColour;"
+		"	//outputColour = vertColour;"
+		"}";
+
 	//alpha blend
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0);
-	frameProgram = CreateProgram("VertexShader.glsl", "TexturedFragmentShader.glsl");
+	//create vertex shader
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vShader, NULL);
+	glCompileShader(vertexShader);
+	//check status on vertex shader
+	GLint status;
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+	if (status == GL_TRUE)
+	{
+		std::cout << "vertex shader is ok" << std::endl;
+	}
+	else
+	{
+		std::cout << "vertex shader is not ok" << std::endl;
+	}
+	//create fragment shader
+	fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragShader, 1, &fShader, NULL);
+	glCompileShader(fragShader);
+	//check status on vertex shader
+	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &status);
+	if (status == GL_TRUE)
+	{
+		std::cout << "frag Shader shader is ok" << std::endl;
+	}
+	else
+	{
+		std::cout << "frag Shader is not ok" << std::endl;
+	}
+
+	frameProgram = glCreateProgram();
 	MatrixIDTextured = glGetUniformLocation(frameProgram, "MVP");
 
 	return 0;
